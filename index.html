@@ -14,9 +14,10 @@
         :root {
             --primary: #0ea5e9;
             --accent: #38bdf8;
-            --bg-dark: #0f172a;
-            --glass: rgba(15, 23, 42, 0.8);
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.7);
             --emergency: #ef4444;
+            --normal: #0ea5e9;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -29,70 +30,77 @@
         
         .glass-morphism {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         #opening-screen {
             position: fixed; inset: 0; z-index: 100;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .scanline {
-            width: 100%; height: 2px; background: rgba(14, 165, 233, 0.2);
-            position: absolute; top: 0; animation: scan 4s linear infinite;
+            width: 100%; height: 3px; background: rgba(14, 165, 233, 0.1);
+            position: absolute; top: 0; animation: scan 3s linear infinite;
         }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
         .tab-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
         .hide { display: none !important; }
         
-        /* Checklist Styles */
-        .check-item {
-            border-left: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        .check-item:hover {
-            background: rgba(255,255,255,0.05);
-            border-left-color: var(--primary);
-        }
-        .check-item.completed {
-            opacity: 0.5;
-            text-decoration: line-through;
-            border-left-color: #22c55e;
-        }
-
-        .caution-box {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #f59e0b;
-        }
-
-        /* Emergency Tab Style */
-        .emergency-tab {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Tactical Tab Styles */
+        .tactical-tab {
             position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .emergency-tab:hover {
-            border-color: var(--emergency);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);
-        }
-        .emergency-tab::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 3px; height: 100%;
-            background: var(--emergency);
-            box-shadow: 0 0 10px var(--emergency);
+        .tactical-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
         }
 
-        .pulse-loading { animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        /* Emergency Red Tab */
+        .tab-emergency {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+        }
+        .tab-emergency:hover {
+            border-color: var(--emergency);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(15, 23, 42, 1) 100%);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .tab-emergency::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: var(--emergency); box-shadow: 2px 0 10px var(--emergency);
+        }
+
+        /* Normal Blue Tab */
+        .tab-normal {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
+        }
+        .tab-normal:hover {
+            border-color: var(--normal);
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(15, 23, 42, 1) 100%);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+        }
+        .tab-normal::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: var(--normal); box-shadow: 2px 0 10px var(--normal);
+        }
+
+        .check-item { transition: all 0.2s; border-left: 2px solid transparent; }
+        .check-item:hover { background: rgba(255,255,255,0.03); border-left-color: var(--primary); }
+        .check-item.completed { opacity: 0.4; text-decoration: line-through; border-left-color: #22c55e; }
+        
+        .caution-box {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .pulse-loading { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
     </style>
 </head>
 <body>
@@ -102,115 +110,119 @@
         <div class="scanline"></div>
         <div class="relative flex flex-col items-center text-center px-6">
             <div id="opening-logo" class="w-24 h-24 mb-6 opacity-0 scale-50">
-                <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]">
+                <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(14,165,233,0.4)]">
             </div>
-            <h1 id="opening-title" class="font-orbitron text-3xl font-bold tracking-widest text-white opacity-0 translate-y-10">
-                SKYOPS <span class="text-sky-500">PILOT</span>
+            <h1 id="opening-title" class="font-orbitron text-3xl font-bold tracking-widest text-white opacity-0 translate-y-10 uppercase">
+                SkyOps <span class="text-sky-500">Protocol</span>
             </h1>
-            <p id="opening-subtitle" class="mt-2 text-sky-400/60 tracking-[0.3em] uppercase text-[10px] opacity-0">Intelligent Checklist System</p>
-            <div id="progress-bar-container" class="w-48 h-0.5 bg-slate-800 mt-10 rounded-full overflow-hidden opacity-0">
-                <div id="progress-bar" class="w-0 h-full bg-sky-500 shadow-[0_0_10px_#0ea5e9]"></div>
+            <p id="opening-subtitle" class="mt-2 text-sky-400/60 tracking-[0.4em] uppercase text-[9px] opacity-0">Advanced Flight Management</p>
+            <div id="progress-bar-container" class="w-48 h-0.5 bg-slate-900 mt-12 rounded-full overflow-hidden opacity-0">
+                <div id="progress-bar" class="w-0 h-full bg-sky-500 shadow-[0_0_15px_#0ea5e9]"></div>
             </div>
         </div>
     </div>
 
-    <!-- Main App -->
+    <!-- App Shell -->
     <div id="app" class="min-h-screen opacity-0 pt-20 pb-10">
         <nav class="fixed top-0 inset-x-0 h-16 glass-morphism z-50 flex items-center justify-between px-6 border-b border-white/5">
             <div class="flex items-center gap-3">
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" class="h-8 w-8" alt="Logo">
-                <span class="font-orbitron font-bold text-lg tracking-tight">SKYOPS</span>
+                <span class="font-orbitron font-bold text-lg tracking-tighter">SKYOPS</span>
             </div>
-            <div class="flex gap-4 sm:gap-6 text-sm font-medium items-center">
+            <div class="flex gap-4 sm:gap-8 text-xs font-bold items-center tracking-widest uppercase">
                 <button onclick="switchPage('library')" id="nav-library" class="nav-btn tab-active py-5 transition-all">Library</button>
-                <button onclick="switchPage('add')" id="nav-add" class="nav-btn text-slate-400 py-5 transition-all">Add New</button>
-                <button onclick="fetchData()" class="p-2 text-slate-400 hover:text-sky-400 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                </button>
-                <button onclick="toggleConfig()" class="text-slate-400 hover:text-white transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </button>
+                <button onclick="switchPage('add')" id="nav-add" class="nav-btn text-slate-500 py-5 transition-all">Add System</button>
+                <div class="h-4 w-[1px] bg-white/10 mx-2"></div>
+                <button onclick="fetchData()" class="p-2 text-slate-500 hover:text-sky-400 transition-all"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></button>
+                <button onclick="toggleConfig()" class="p-2 text-slate-500 hover:text-white transition-all"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></button>
             </div>
         </nav>
 
-        <main class="max-w-6xl mx-auto px-6 mt-8">
-            <!-- Library -->
-            <div id="page-library" class="space-y-10">
-                <div id="list-emergency-section">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-8 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]"></div>
-                            <h3 class="text-xl font-bold text-red-400 font-orbitron uppercase tracking-widest">Emergency procedures</h3>
+        <main class="max-w-7xl mx-auto px-6 mt-8">
+            <!-- Page: Library -->
+            <div id="page-library" class="space-y-12">
+                
+                <!-- Emergency Procedures Section -->
+                <section>
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-10 bg-red-600 rounded-sm shadow-[0_0_15px_#ef4444]"></div>
+                            <div>
+                                <h2 class="text-2xl font-bold font-orbitron text-red-500 tracking-tighter uppercase">Emergency Operations</h2>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Immediate Response Required</p>
+                            </div>
                         </div>
-                        <span class="text-[9px] text-red-500/50 font-bold tracking-tighter animate-pulse">CRITICAL STATUS ACTIVE</span>
                     </div>
-
-                    <!-- Emergency Quick-Access Tabs -->
-                    <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
-                        <!-- Special Tabs will be injected here -->
+                    <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <!-- Emergency Tabs Generated Here -->
                     </div>
+                </section>
 
-                    <div id="list-emergency" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                </div>
+                <div class="border-t border-white/5 my-12"></div>
 
-                <div id="list-normal-section">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-2 h-8 bg-sky-500 rounded-full shadow-[0_0_10px_#0ea5e9]"></div>
-                        <h3 class="text-xl font-bold text-sky-400 font-orbitron uppercase tracking-widest">Normal Operations</h3>
+                <!-- Normal Procedures Section -->
+                <section>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-3 h-10 bg-sky-600 rounded-sm shadow-[0_0_15px_#0ea5e9]"></div>
+                        <div>
+                            <h2 class="text-2xl font-bold font-orbitron text-sky-500 tracking-tighter uppercase">Standard Protocols</h2>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Normal Flight Phases</p>
+                        </div>
                     </div>
-                    <div id="list-normal" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                </div>
+                    <div id="normal-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <!-- Normal Tabs Generated Here -->
+                    </div>
+                </section>
             </div>
 
-            <!-- Add Checklist -->
-            <div id="page-add" class="hide max-w-3xl mx-auto">
-                <div class="glass-morphism rounded-2xl p-6 sm:p-8 space-y-6">
-                    <div class="border-b border-white/10 pb-4">
-                        <h2 class="text-2xl font-bold font-orbitron">CREATE PROCEDURE</h2>
-                        <p class="text-slate-400 text-sm">Convert raw data into a digital cockpit checklist.</p>
+            <!-- Page: Add Prodecure -->
+            <div id="page-add" class="hide max-w-4xl mx-auto">
+                <div class="glass-morphism rounded-2xl p-8 space-y-8">
+                    <div class="border-b border-white/10 pb-6 text-center">
+                        <h2 class="text-2xl font-bold font-orbitron tracking-widest">ADD NEW PROCEDURE</h2>
+                        <p class="text-slate-500 text-[10px] uppercase font-bold mt-2">Initialize new mission parameters into the databank</p>
                     </div>
 
-                    <form id="checklist-form" class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Section</label>
-                                <input type="text" id="form-section" placeholder="e.g. Engine Nose" required class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm">
+                    <form id="checklist-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Mission Section</label>
+                                <input type="text" id="form-section" placeholder="e.g. Engine / Cockpit" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium">
                             </div>
-                            <div>
-                                <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Type</label>
-                                <select id="form-type" class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm">
-                                    <option value="Normal">Normal Operation</option>
-                                    <option value="Emergency">Emergency</option>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Operation Mode</label>
+                                <select id="form-type" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium appearance-none">
+                                    <option value="Normal">NORMAL PROCEDURE</option>
+                                    <option value="Emergency">EMERGENCY PROCEDURE</option>
                                 </select>
                             </div>
                         </div>
                         
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Procedure Title</label>
-                            <input type="text" id="form-title" placeholder="e.g. Engine failures" required class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Procedure Title</label>
+                            <input type="text" id="form-title" placeholder="e.g. Engine Failure Recovery" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium">
                         </div>
 
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Checklist Content (Smart Parser)</label>
-                            <textarea id="form-content" rows="8" placeholder="Paste your checklist text here...&#10;☐ Main Rotor - Removed&#10;⚠ CAUTION: Lose of parking brakes" 
-                                class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm font-mono"></textarea>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Interactive Data (Smart Text)</label>
+                            <textarea id="form-content" rows="6" placeholder="☐ System Check — OK&#10;⚠ CAUTION: High Pressure" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-mono text-sm"></textarea>
                         </div>
 
-                        <div class="text-center py-2 text-slate-500 text-xs font-bold uppercase tracking-widest">— OR —</div>
+                        <div class="relative py-4">
+                            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
+                            <div class="relative flex justify-center text-[9px] uppercase font-bold text-slate-600 bg-[#020617] px-4 tracking-[0.3em]">OR ATTACH LEGACY FILE</div>
+                        </div>
 
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Upload Legacy File (PDF/Image)</label>
-                            <div id="drop-area" class="border-2 border-dashed border-white/10 rounded-lg p-6 text-center cursor-pointer hover:border-sky-500/50 transition-all group">
-                                <input type="file" id="form-file" class="hidden" accept="image/*,application/pdf">
-                                <div id="file-info" class="text-slate-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2 opacity-50 group-hover:text-sky-500 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                                    <p class="text-xs">Drag & Drop Legacy Document</p>
-                                </div>
+                        <div id="drop-area" class="border-2 border-dashed border-white/10 rounded-2xl p-10 text-center cursor-pointer hover:border-sky-500/50 transition-all group bg-white/[0.01]">
+                            <input type="file" id="form-file" class="hidden" accept="image/*,application/pdf">
+                            <div id="file-info" class="text-slate-500">
+                                <svg class="h-10 w-10 mx-auto mb-4 opacity-30 group-hover:text-sky-500 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                                <p class="text-xs uppercase font-bold tracking-widest">Drop Mission Documents Here</p>
                             </div>
                         </div>
 
-                        <button type="submit" id="submit-btn" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2">
-                            <span>SYCHRONIZE TO SKYDRIVE</span>
+                        <button type="submit" id="submit-btn" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-5 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(14,165,233,0.5)] uppercase tracking-[0.2em] text-xs">
+                            Sync to System Databank
                         </button>
                     </form>
                 </div>
@@ -218,60 +230,52 @@
         </main>
     </div>
 
-    <!-- Preview Modal -->
-    <div id="preview-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-sm" onclick="closePreview()"></div>
-        <div class="relative w-full max-w-4xl h-[90vh] glass-morphism rounded-2xl overflow-hidden flex flex-col shadow-2xl">
-            <div class="flex items-center justify-between p-4 border-b border-white/10">
+    <!-- Preview Viewer -->
+    <div id="preview-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4 sm:p-10">
+        <div class="absolute inset-0 bg-[#020617]/95 backdrop-blur-md" onclick="closePreview()"></div>
+        <div class="relative w-full max-w-5xl h-full glass-morphism rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-white/10">
+            <div class="flex items-center justify-between p-6 border-b border-white/10 bg-black/20">
                 <div>
-                    <h3 id="preview-title" class="font-bold text-lg font-orbitron text-sky-400 uppercase">Preview</h3>
-                    <p id="preview-section" class="text-[10px] uppercase text-slate-500 tracking-widest font-bold"></p>
+                    <p id="preview-section" class="text-[9px] uppercase text-sky-500 tracking-[0.3em] font-bold mb-1"></p>
+                    <h3 id="preview-title" class="font-bold text-xl font-orbitron text-white uppercase">Procedure View</h3>
                 </div>
-                <button onclick="closePreview()" class="p-2 hover:bg-white/10 rounded-full transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onclick="closePreview()" class="p-3 hover:bg-white/5 rounded-full transition-all text-slate-400 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            <div id="preview-container" class="flex-1 overflow-auto bg-[#020617] p-6 sm:p-10"></div>
-            <div class="p-4 border-t border-white/10 text-center bg-black/20">
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">SkyOps Flight Protocol • Confirmed by Digital Signature</p>
+            <div id="preview-container" class="flex-1 overflow-auto p-8 sm:p-12">
+                <!-- Data Content -->
+            </div>
+            <div class="p-6 border-t border-white/5 text-center bg-black/40">
+                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.4em]">Flight System Active • Digital Copy Only</p>
             </div>
         </div>
     </div>
 
+    <!-- Configuration -->
     <div id="config-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/60" onclick="toggleConfig()"></div>
-        <div class="relative w-full max-w-md glass-morphism rounded-2xl p-6 shadow-2xl">
-            <h3 class="text-xl font-bold font-orbitron mb-4">SYSTEM CONFIG</h3>
-            <input type="text" id="config-url" placeholder="Paste Script URL" class="w-full bg-slate-900 border border-white/10 rounded px-3 py-3 text-sm focus:border-sky-500 outline-none text-sky-400 mb-4">
-            <button onclick="saveConfig()" class="w-full bg-sky-600 py-3 rounded font-bold text-sm">ESTABLISH CONNECTION</button>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleConfig()"></div>
+        <div class="relative w-full max-w-md glass-morphism rounded-3xl p-8 shadow-2xl">
+            <h3 class="text-xl font-bold font-orbitron mb-6 text-center tracking-widest">DATABASE LINK</h3>
+            <div class="space-y-6">
+                <input type="text" id="config-url" placeholder="https://script.google.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-4 text-sm focus:border-sky-500 outline-none text-sky-400">
+                <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest">Connect to Network</button>
+            </div>
         </div>
     </div>
 
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[110] space-y-2"></div>
+    <div id="toast-container" class="fixed bottom-8 right-8 z-[110] space-y-3"></div>
 
     <script>
         let appData = [];
         let scriptUrl = localStorage.getItem('skyops_url') || "";
-
-        // Daftar Judul Tab Emergency yang ditentukan
-        const EMERGENCY_PRIORITY_TITLES = [
-            "Rotor warnings",
-            "Engine failures",
-            "Fire procedures",
-            "Tail rotor emergencies",
-            "Hydraulic failures",
-            "Electrical failures",
-            "Landing gear failures",
-            "EFIS failures",
-            "Misc malfunction"
-        ];
 
         window.onload = () => {
             if (scriptUrl) {
                 document.getElementById('config-url').value = scriptUrl;
                 fetchData();
             } else {
-                setTimeout(toggleConfig, 1000);
+                setTimeout(toggleConfig, 1200);
             }
             startOpeningAnimation();
         };
@@ -279,100 +283,71 @@
         function startOpeningAnimation() {
             const tl = gsap.timeline({
                 onComplete: () => {
-                    gsap.to("#opening-screen", { opacity: 0, duration: 1, delay: 0.5, onComplete: () => {
+                    gsap.to("#opening-screen", { opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
                         document.getElementById('opening-screen').classList.add('hide');
                         gsap.to("#app", { opacity: 1, duration: 1 });
                     }});
                 }
             });
-            tl.to("#opening-logo", { opacity: 1, scale: 1, duration: 1, ease: "back.out(1.7)" })
+            tl.to("#opening-logo", { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.7)" })
               .to("#opening-title", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5")
               .to("#opening-subtitle", { opacity: 1, duration: 0.8 }, "-=0.4")
               .to("#progress-bar-container", { opacity: 1, duration: 0.5 }, "-=0.3")
-              .to("#progress-bar", { width: "100%", duration: 2.5, ease: "power2.inOut" });
+              .to("#progress-bar", { width: "100%", duration: 3, ease: "power2.inOut" });
         }
 
         async function fetchData() {
             if (!scriptUrl) return;
-            showToast("Connecting to SkyOps Database...", "info");
+            showToast("Syncing with Global Network...", "info");
             try {
                 const response = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
                 const result = await response.json();
                 appData = result.data || [];
                 renderLibrary();
-                showToast(`System Ready: ${appData.length} protocols loaded`, "success");
+                showToast(`Sync Complete: ${appData.length} entries found`, "success");
             } catch (error) {
-                showToast("System Link Failure", "error");
+                showToast("Network Link Error", "error");
             }
         }
 
         function renderLibrary() {
-            const containerNormal = document.getElementById('list-normal');
-            const containerEmergency = document.getElementById('list-emergency');
-            const containerEmergencyTabs = document.getElementById('emergency-tabs');
+            const containerNormal = document.getElementById('normal-tabs');
+            const containerEmergency = document.getElementById('emergency-tabs');
             
             containerNormal.innerHTML = "";
             containerEmergency.innerHTML = "";
-            containerEmergencyTabs.innerHTML = "";
 
             const normals = appData.filter(item => String(item.type).toLowerCase() === "normal");
             const emergencies = appData.filter(item => String(item.type).toLowerCase() === "emergency");
 
-            // Filter Emergency items yang masuk kategori Tab Prioritas
-            const priorityEmergencyItems = emergencies.filter(item => 
-                EMERGENCY_PRIORITY_TITLES.some(t => t.toLowerCase() === String(item.title).toLowerCase())
-            );
-
-            // Filter Emergency items sisanya (yang bukan tab prioritas)
-            const otherEmergencyItems = emergencies.filter(item => 
-                !EMERGENCY_PRIORITY_TITLES.some(t => t.toLowerCase() === String(item.title).toLowerCase())
-            );
-
-            // Render Tab Prioritas
-            if (priorityEmergencyItems.length > 0) {
-                priorityEmergencyItems.forEach(item => {
-                    const tab = document.createElement('button');
-                    tab.className = "emergency-tab p-4 rounded-lg text-left group";
-                    tab.onclick = () => openPreview(item);
-                    tab.innerHTML = `
-                        <p class="text-[8px] uppercase tracking-widest text-red-500 font-bold mb-1 opacity-60 group-hover:opacity-100 transition-all">PRIORITY ACCESS</p>
-                        <h4 class="text-xs font-bold text-slate-100 leading-tight uppercase group-hover:text-red-400 transition-all">${item.title}</h4>
-                    `;
-                    containerEmergencyTabs.appendChild(tab);
-                });
+            // Render Emergency Tabs
+            if (emergencies.length > 0) {
+                emergencies.forEach(item => containerEmergency.appendChild(createTacticalTab(item, 'emergency')));
             } else {
-                containerEmergencyTabs.innerHTML = '<div class="col-span-full py-4 text-center text-slate-600 italic text-xs">No priority tabs configured. Use specific titles in Emergency mode.</div>';
+                containerEmergency.innerHTML = '<div class="col-span-full py-10 text-center text-slate-700 italic text-[10px] uppercase tracking-widest border border-dashed border-white/5 rounded-xl">No Emergency Procedures Stored</div>';
             }
 
-            // Render kartu Normal & Emergency lainnya
-            normals.forEach(item => containerNormal.appendChild(createCard(item)));
-            otherEmergencyItems.forEach(item => containerEmergency.appendChild(createCard(item)));
-            
-            if (otherEmergencyItems.length === 0 && priorityEmergencyItems.length === 0) {
-                containerEmergency.innerHTML = '<div class="col-span-full py-10 text-center text-slate-600 italic">No emergency protocols found.</div>';
+            // Render Normal Tabs
+            if (normals.length > 0) {
+                normals.forEach(item => containerNormal.appendChild(createTacticalTab(item, 'normal')));
+            } else {
+                containerNormal.innerHTML = '<div class="col-span-full py-10 text-center text-slate-700 italic text-[10px] uppercase tracking-widest border border-dashed border-white/5 rounded-xl">No Normal Procedures Stored</div>';
             }
         }
 
-        function createCard(item) {
-            const card = document.createElement('div');
-            card.className = "glass-morphism rounded-xl p-5 hover:border-sky-500/30 transition-all cursor-pointer group relative overflow-hidden";
-            card.onclick = () => openPreview(item);
+        function createTacticalTab(item, mode) {
+            const btn = document.createElement('button');
+            btn.className = `tactical-tab tab-${mode} p-6 rounded-2xl text-left flex flex-col justify-between h-32 group`;
+            btn.onclick = () => openPreview(item);
             
-            const isEmergency = String(item.type).toLowerCase() === "emergency";
-            const accent = isEmergency ? "red" : "sky";
-            
-            card.innerHTML = `
-                <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-40 transition-all">
-                    ${item.content ? '<svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-width="2"/></svg>' : '<svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.414a4 4 0 00-5.656-5.656l-6.415 6.414a6 6 0 108.486 8.486L20.5 13" stroke-width="2"/></svg>'}
+            btn.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <span class="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-all ${mode === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
+                    <svg class="h-4 w-4 opacity-20 group-hover:opacity-100 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
-                <p class="text-[9px] uppercase tracking-[0.2em] text-slate-500 mb-1 font-bold">${item.section || 'General'}</p>
-                <h4 class="text-md font-bold text-slate-200 group-hover:text-white transition-all line-clamp-1">${item.title}</h4>
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="text-[9px] bg-${accent}-500/10 text-${accent}-400 px-2 py-0.5 rounded border border-${accent}-500/20 uppercase font-bold tracking-widest">${item.type}</span>
-                    <span class="text-[9px] text-slate-600 font-mono">#${String(item.id).substring(0,6)}</span>
-                </div>
+                <h4 class="text-xs font-bold leading-snug uppercase tracking-wider text-slate-200 group-hover:text-white line-clamp-2">${item.title}</h4>
             `;
-            return card;
+            return btn;
         }
 
         function parseChecklistText(text) {
@@ -381,45 +356,51 @@
             lines.forEach((line) => {
                 const trimmed = line.trim();
                 if (!trimmed) return;
+
                 if (trimmed === trimmed.toUpperCase() && !trimmed.includes('☐') && !trimmed.includes('⚠')) {
-                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-8 mb-4 border-b border-sky-500/20 pb-2">${trimmed}</h4>`;
+                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-10 mb-4 border-b border-sky-500/10 pb-3 tracking-tighter">${trimmed}</h4>`;
                 } else if (trimmed.includes('⚠') || trimmed.toUpperCase().includes('CAUTION:')) {
-                    html += `<div class="caution-box p-4 rounded-lg my-4 text-sm flex gap-3 italic"><span class="text-xl">⚠</span><div>${trimmed.replace(/⚠/g, '').replace(/CAUTION:/gi, '<strong>CAUTION:</strong>')}</div></div>`;
+                    html += `<div class="caution-box p-6 rounded-2xl my-6 text-sm flex gap-4 italic"><span class="text-2xl">⚠</span><div>${trimmed.replace(/⚠/g, '').replace(/CAUTION:/gi, '<strong>CAUTION:</strong>')}</div></div>`;
                 } else if (trimmed.includes('☐') || trimmed.startsWith('-') || trimmed.startsWith('•')) {
                     const cleanText = trimmed.replace(/[☐\-•]/g, '').trim();
                     const parts = cleanText.split('—');
-                    html += `<div class="check-item group flex items-start gap-4 p-3 rounded-md cursor-pointer border-l-2 border-transparent transition-all" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded border border-slate-700 flex items-center justify-center flex-shrink-0 group-hover:border-sky-500 transition-all"><div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div></div><div class="flex-1 text-sm leading-relaxed"><span class="text-slate-200 font-medium">${parts[0]}</span>${parts[1] ? `<span class="text-slate-500 mx-2">—</span><span class="text-sky-400/80">${parts[1]}</span>` : ''}</div></div>`;
+                    html += `<div class="check-item flex items-start gap-5 p-4 rounded-xl cursor-pointer" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded-md border border-slate-800 flex items-center justify-center flex-shrink-0 group-hover:border-sky-500"><div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div></div><div class="flex-1 text-sm"><span class="text-slate-100 font-medium">${parts[0]}</span>${parts[1] ? `<span class="text-slate-600 mx-3">|</span><span class="text-sky-400/70 uppercase text-[11px] font-bold">${parts[1]}</span>` : ''}</div></div>`;
                 } else {
-                    html += `<p class="text-slate-400 text-xs px-2">${trimmed}</p>`;
+                    html += `<p class="text-slate-400 text-xs px-2 leading-relaxed opacity-60">${trimmed}</p>`;
                 }
             });
-            html += '</div>';
-            return html;
+            return html + '</div>';
         }
 
         function openPreview(item) {
             const modal = document.getElementById('preview-modal');
             const container = document.getElementById('preview-container');
             document.getElementById('preview-title').innerText = item.title;
-            document.getElementById('preview-section').innerText = `${item.section} • ${item.type} PROTOCOL`;
+            document.getElementById('preview-section').innerText = `${item.section} // ${item.type} PHASE`;
             modal.classList.remove('hide');
+            
             if (item.content) {
                 container.innerHTML = parseChecklistText(item.content);
             } else if (item.fileUrl) {
                 if (item.fileType && item.fileType.includes('pdf')) {
-                    container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none"></iframe>`;
+                    container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>`;
                 } else {
-                    container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto shadow-2xl rounded-lg">`;
+                    container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl shadow-2xl">`;
                 }
+            } else {
+                container.innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-20"><svg class="h-20 w-20 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><p class="font-bold uppercase tracking-[0.3em]">No Data Link Available</p></div>';
             }
         }
 
+        // Form Submit
         document.getElementById('checklist-form').onsubmit = async (e) => {
             e.preventDefault();
             if (!scriptUrl) return toggleConfig();
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="pulse-loading tracking-widest">TRANSMITTING MISSION DATA...</span>`;
+            
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="pulse-loading tracking-[0.3em]">Establishing Uplink...</span>`;
+
             const payload = {
                 action: 'create',
                 section: document.getElementById('form-section').value,
@@ -430,25 +411,27 @@
                 fileMime: selectedFileType,
                 fileData: selectedFileBase64
             };
+
             try {
                 const response = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await response.json();
                 if (result.status === "success") {
-                    showToast("Database Synchronized", "success");
+                    showToast("Protocol Successfully Synchronized", "success");
                     document.getElementById('checklist-form').reset();
                     selectedFileBase64 = null;
-                    document.getElementById('file-info').innerHTML = `<p class="text-xs">Select Legacy Document</p>`;
+                    document.getElementById('file-info').innerHTML = `<p class="text-xs uppercase font-bold tracking-widest">Drop Mission Documents Here</p>`;
                     switchPage('library');
                     fetchData();
                 }
             } catch (error) {
-                showToast("Transmission Failure", "error");
+                showToast("Transmission Interference Detected", "error");
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span>SYCHRONIZE TO SKYDRIVE</span>`;
+                btn.disabled = false;
+                btn.innerHTML = `Sync to System Databank`;
             }
         };
 
+        // File Handler
         const fileInput = document.getElementById('form-file');
         let selectedFileBase64 = null, selectedFileName = "", selectedFileType = "";
         document.getElementById('drop-area').onclick = () => fileInput.click();
@@ -457,7 +440,7 @@
             if (file) {
                 selectedFileName = file.name;
                 selectedFileType = file.type;
-                document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-xs">${file.name}</p>`;
+                document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-xs uppercase tracking-widest">${file.name}</p><p class="text-[9px] mt-1 text-slate-600">Attached & Ready</p>`;
                 const reader = new FileReader();
                 reader.onload = (e) => { selectedFileBase64 = e.target.result.split(',')[1]; };
                 reader.readAsDataURL(file);
@@ -465,12 +448,15 @@
         };
 
         function switchPage(page) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('tab-active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-slate-500'));
+            
             document.getElementById('page-library').classList.add('hide');
             document.getElementById('page-add').classList.add('hide');
-            document.getElementById('nav-library').classList.remove('tab-active');
-            document.getElementById('nav-add').classList.remove('tab-active');
+            
             document.getElementById(`page-${page}`).classList.remove('hide');
             document.getElementById(`nav-${page}`).classList.add('tab-active');
+            document.getElementById(`nav-${page}`).classList.remove('text-slate-500');
         }
         function toggleConfig() { document.getElementById('config-modal').classList.toggle('hide'); }
         function saveConfig() {
@@ -481,8 +467,8 @@
         function showToast(m, t) {
             const toast = document.createElement('div');
             const c = { success: 'border-green-500 text-green-500', error: 'border-red-500 text-red-500', info: 'border-sky-500 text-sky-500' };
-            toast.className = `px-6 py-3 rounded border glass-morphism ${c[t]} font-medium text-[10px] tracking-widest translate-x-20 opacity-0 transition-all duration-300`;
-            toast.innerText = m.toUpperCase();
+            toast.className = `px-6 py-4 rounded-xl border glass-morphism ${c[t]} font-bold text-[10px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase`;
+            toast.innerText = m;
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 100);
             setTimeout(() => { toast.classList.add('translate-x-20', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
