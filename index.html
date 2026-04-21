@@ -38,6 +38,7 @@
             border: 1px solid var(--border);
         }
 
+        /* Opening Screen */
         #opening-screen {
             position: fixed; inset: 0; z-index: 1000;
             background: #020617;
@@ -52,6 +53,7 @@
         }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
+        /* Navigation */
         .nav-link { position: relative; transition: all 0.3s ease; letter-spacing: 0.1em; }
         .nav-link.active { color: var(--primary); }
         .nav-link.active::after {
@@ -60,7 +62,7 @@
             border-radius: 2px;
         }
 
-        /* Tactical Tabs di Library */
+        /* Tactical Tabs */
         .tab-btn {
             position: relative;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -74,7 +76,7 @@
         .tab-btn.emergency::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--emergency); box-shadow: 0 0 10px var(--emergency); border-radius: 0 4px 4px 0; }
         .tab-btn.normal::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--primary); box-shadow: 0 0 10px var(--primary); border-radius: 0 4px 4px 0; }
 
-        /* Kartu Model Pesawat Tanpa Ikon */
+        /* Modern Text-Only Model Cards */
         .model-card {
             background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.03) 0%, rgba(2, 6, 23, 0.8) 100%);
             border: 1px solid var(--border);
@@ -85,27 +87,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+            min-height: 180px;
         }
         .model-card:hover { 
             border-color: var(--primary); 
-            transform: translateY(-8px); 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(14, 165, 233, 0.1); 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(14, 165, 233, 0.1); 
         }
-        .model-card h3 {
-            transition: color 0.3s ease;
-        }
-        .model-card:hover h3 {
-            color: var(--primary);
-            text-shadow: 0 0 15px var(--primary-glow);
-        }
+        .model-card h3 { transition: all 0.3s ease; }
+        .model-card:hover h3 { color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
 
         .check-item { transition: all 0.2s ease; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
         .check-item:hover { background: rgba(255, 255, 255, 0.02); }
         .check-item.completed { opacity: 0.3; }
         .indicator { width: 1.25rem; height: 1.25rem; border: 1.5px solid #334155; border-radius: 4px; position: relative; }
         .check-item.completed .indicator { background: #22c55e; border-color: #22c55e; }
-        .check-item.completed .indicator::after { content: '✓'; color: #020617; font-size: 12px; font-weight: 800; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 
         .caution-alert { background: rgba(245, 158, 11, 0.05); border-left: 4px solid #f59e0b; color: #f59e0b; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -116,29 +112,26 @@
 </head>
 <body class="no-scrollbar">
 
-    <!-- Animasi Booting -->
+    <!-- Opening Screen -->
     <div id="opening-screen">
         <div class="scanline"></div>
-        <div class="relative flex flex-col items-center text-center px-6">
+        <div class="relative flex flex-col items-center">
             <div id="logo-container" class="w-20 h-20 mb-8 opacity-0 scale-90">
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="SkyOps Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_20px_var(--primary-glow)]">
             </div>
-            <div class="text-center">
-                <h1 id="brand-title" class="font-orbitron text-2xl font-bold tracking-[0.4em] text-white opacity-0 translate-y-4 uppercase">SkyOps</h1>
-                <p id="brand-subtitle" class="text-[9px] font-medium tracking-[0.6em] text-slate-500 uppercase mt-2 opacity-0">Pilot Checklist System</p>
-            </div>
-            <div id="boot-loader" class="w-40 h-[1px] bg-slate-900 mt-12 overflow-hidden opacity-0">
+            <h1 id="brand-title" class="font-orbitron text-2xl font-bold tracking-[0.4em] text-white opacity-0 translate-y-4 uppercase">SkyOps</h1>
+            <div id="boot-loader" class="w-40 h-[1px] bg-slate-900 mt-10 overflow-hidden opacity-0">
                 <div id="boot-progress" class="w-0 h-full bg-sky-500 shadow-[0_0_15px_#0ea5e9]"></div>
             </div>
         </div>
     </div>
 
-    <!-- Layout Aplikasi Utama -->
+    <!-- Main App Shell -->
     <div id="app" class="min-h-screen opacity-0 transition-opacity duration-1000">
         <nav class="fixed top-0 inset-x-0 h-16 glass-panel z-50 flex items-center justify-between px-4 md:px-8">
             <div class="flex items-center gap-3">
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" class="h-8 w-8" alt="Logo">
-                <span class="font-orbitron font-bold text-lg tracking-tighter hidden sm:block uppercase">SkyOps</span>
+                <span class="font-orbitron font-bold text-lg tracking-tighter uppercase">SkyOps</span>
             </div>
             <div class="flex items-center gap-6 md:gap-10 text-[10px] font-bold uppercase tracking-widest">
                 <button onclick="switchPage('library')" id="nav-library" class="nav-link active">Library</button>
@@ -146,36 +139,33 @@
                 <button onclick="switchPage('add')" id="nav-add" class="nav-link text-slate-500">Initialize</button>
                 <div class="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
                 <div class="flex items-center gap-4">
-                    <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 transition-colors" title="Sync System"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
-                    <button onclick="toggleConfig()" class="text-slate-500 hover:text-white transition-colors" title="Settings"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+                    <button onclick="toggleConfig()" class="text-slate-500 hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
                 </div>
             </div>
         </nav>
 
         <main class="pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
             
-            <!-- LIBRARY PAGE -->
+            <!-- LIBRARY -->
             <div id="page-library" class="space-y-12">
-                <!-- Step 1: Model Selection (Text Only) -->
                 <div id="selection-model" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto pt-10">
                     <div onclick="selectFleetModel('Helicopter')" class="model-card p-12 rounded-[2rem] group">
-                        <h3 class="font-orbitron text-3xl font-bold tracking-[0.4em] uppercase">HELICOPTER</h3>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.5em] mt-3">Rotary Wing Fleet Operations</p>
+                        <h3 class="font-orbitron text-2xl font-bold tracking-[0.4em] uppercase">HELICOPTER</h3>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-3">Rotary Wing Fleet</p>
                     </div>
                     <div onclick="selectFleetModel('Fixedwing')" class="model-card p-12 rounded-[2rem] group">
-                        <h3 class="font-orbitron text-3xl font-bold tracking-[0.4em] uppercase">FIXEDWING</h3>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.5em] mt-3">Fixed Wing Fleet Operations</p>
+                        <h3 class="font-orbitron text-2xl font-bold tracking-[0.4em] uppercase">FIXEDWING</h3>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-3">Fixed Wing Fleet</p>
                     </div>
                 </div>
 
-                <!-- Step 2: Type Selection Dropdown -->
                 <div id="selection-type" class="hide max-w-md mx-auto space-y-6">
                     <button onclick="resetFleetModel()" class="text-[10px] font-bold text-slate-500 hover:text-sky-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3"/></svg> BACK TO FLEET SELECTION
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3"/></svg> BACK TO SELECTION
                     </button>
                     <div class="relative">
-                        <select id="library-type-dropdown" onchange="selectFleetType(this.value)" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-8 py-5 text-sm font-bold tracking-widest uppercase outline-none focus:border-sky-500 transition-all appearance-none cursor-pointer">
-                            <!-- Options injected -->
+                        <select id="library-type-dropdown" onchange="selectFleetType(this.value)" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-8 py-5 text-sm font-bold tracking-widest uppercase outline-none focus:border-sky-500 appearance-none cursor-pointer">
                         </select>
                         <div class="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3"/></svg>
@@ -183,21 +173,19 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Result Tabs -->
                 <div id="checklist-results" class="hide space-y-12">
                     <section>
                         <div class="flex items-center gap-4 mb-8">
                             <div class="h-px flex-1 bg-gradient-to-r from-red-500/30 to-transparent"></div>
-                            <h2 class="font-orbitron text-red-500 text-[11px] font-bold tracking-[0.3em] uppercase">Emergency Checklist</h2>
+                            <h2 class="font-orbitron text-red-500 text-[11px] font-bold tracking-[0.3em] uppercase text-center">Emergency Checklist</h2>
                             <div class="h-px flex-1 bg-gradient-to-l from-red-500/30 to-transparent"></div>
                         </div>
                         <div id="emergency-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
                     </section>
-
                     <section>
                         <div class="flex items-center gap-4 mb-8">
                             <div class="h-px flex-1 bg-gradient-to-r from-sky-500/30 to-transparent"></div>
-                            <h2 class="font-orbitron text-sky-500 text-[11px] font-bold tracking-[0.3em] uppercase">Normal Checklist</h2>
+                            <h2 class="font-orbitron text-sky-500 text-[11px] font-bold tracking-[0.3em] uppercase text-center">Normal Checklist</h2>
                             <div class="h-px flex-1 bg-gradient-to-l from-sky-500/30 to-transparent"></div>
                         </div>
                         <div id="normal-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
@@ -205,42 +193,39 @@
                 </div>
             </div>
 
-            <!-- DATABANK PAGE -->
+            <!-- DATABANK -->
             <div id="page-documents" class="hide space-y-6">
                 <div class="flex justify-between items-center bg-slate-900/40 p-6 rounded-2xl border border-white/5">
                     <div>
                         <h2 class="text-xl font-bold font-orbitron tracking-tight uppercase">Registry Databank</h2>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Central protocol management system</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Management of flight protocols</p>
                     </div>
-                    <button onclick="switchPage('add')" class="bg-sky-600 hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Add Record</button>
+                    <button onclick="switchPage('add')" class="bg-sky-600 hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-sky-900/20">Add Record</button>
                 </div>
                 <div class="glass-panel rounded-2xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-white/5">
-                                <tr>
-                                    <th class="p-4">Fleet Reference</th>
-                                    <th class="p-4">Section</th>
-                                    <th class="p-4 font-semibold">Procedure Title</th>
-                                    <th class="p-4 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="document-table-body" class="text-sm"></tbody>
-                        </table>
-                    </div>
+                    <table class="w-full text-left">
+                        <thead class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-white/5">
+                            <tr>
+                                <th class="p-4">Fleet Reference</th>
+                                <th class="p-4">Section</th>
+                                <th class="p-4">Title</th>
+                                <th class="p-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="document-table-body" class="text-sm"></tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- INITIALIZE PAGE -->
+            <!-- INITIALIZE -->
             <div id="page-add" class="hide max-w-3xl mx-auto">
                 <div class="glass-panel rounded-3xl p-8 space-y-8">
                     <div class="text-center border-b border-white/5 pb-8">
                         <h2 id="form-title-heading" class="text-2xl font-bold font-orbitron tracking-widest uppercase">Initialize Protocol</h2>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-2">Create new system record</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-2">Sync parameters to cloud core</p>
                     </div>
                     <form id="protocol-form" class="space-y-6">
                         <input type="hidden" id="form-id">
-                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Aircraft Model</label>
@@ -256,43 +241,37 @@
                                     <select id="form-aircraft-type-select" onchange="checkManualType(this.value)" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
                                         <option value="" disabled selected>Select Type</option>
                                     </select>
-                                    <input type="text" id="form-aircraft-type-manual" placeholder="Manual Type Entry..." class="hide w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 mt-2">
+                                    <input type="text" id="form-aircraft-type-manual" placeholder="Custom type name..." class="hide w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 mt-2">
                                 </div>
                             </div>
                         </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Mission Section</label>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Section</label>
                                 <input type="text" id="form-section" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Protocol Mode</label>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Mode</label>
                                 <select id="form-type" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
                                     <option value="Normal">NORMAL OPS</option>
                                     <option value="Emergency">EMERGENCY OPS</option>
                                 </select>
                             </div>
                         </div>
-
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Procedure Title</label>
                             <input type="text" id="form-title" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
                         </div>
-
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Checklist Content (Interactive)</label>
-                            <textarea id="form-content" rows="6" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm font-mono outline-none focus:border-sky-500"></textarea>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Checklist Content</label>
+                            <textarea id="form-content" rows="5" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm font-mono outline-none focus:border-sky-500"></textarea>
                         </div>
-
                         <div id="drop-area" class="border-2 border-dashed border-white/5 rounded-2xl p-6 text-center bg-white/[0.01] hover:border-sky-500/30 cursor-pointer group transition-all">
                             <input type="file" id="form-file" class="hidden">
                             <div id="file-info" class="text-slate-500 flex flex-col items-center">
-                                <svg class="w-6 h-6 mb-2 opacity-20 group-hover:opacity-100 group-hover:text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
-                                <p class="text-[9px] font-bold uppercase tracking-widest">Supplementary Media (PDF/IMG)</p>
+                                <p class="text-[9px] font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100">Attach Media (PDF/IMG)</p>
                             </div>
                         </div>
-
                         <div class="flex gap-4 pt-4">
                             <button type="submit" id="submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-sky-900/30">Commit to Cloud</button>
                             <button type="button" onclick="switchPage('documents')" id="cancel-btn" class="hide px-8 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
@@ -303,54 +282,48 @@
         </main>
     </div>
 
-    <!-- MODALS (Preview & Config) -->
+    <!-- MODALS -->
     <div id="preview-modal" class="fixed inset-0 z-[200] hide flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closePreview()"></div>
         <div class="relative w-full max-w-5xl h-[85vh] glass-panel rounded-[2rem] overflow-hidden flex flex-col border border-white/10 shadow-2xl">
             <div class="flex items-center justify-between p-6 border-b border-white/5 bg-black/20">
                 <div id="preview-meta"></div>
                 <div class="flex items-center gap-3">
-                    <button onclick="downloadCurrentFile()" class="p-2.5 bg-sky-500/10 hover:bg-sky-500/20 rounded-full text-sky-400" title="Export"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                    <button onclick="downloadCurrentFile()" class="p-2.5 bg-sky-500/10 hover:bg-sky-500/20 rounded-full text-sky-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
                     <button onclick="closePreview()" class="p-2.5 hover:bg-white/10 rounded-full text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
                 </div>
             </div>
-            <div id="preview-content" class="flex-1 overflow-auto p-8 md:p-12 bg-[#020617]/40"></div>
-        </div>
-    </div>
-
-    <div id="config-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="toggleConfig()"></div>
-        <div class="relative w-full max-w-md glass-panel rounded-3xl p-10">
-            <h3 class="font-orbitron text-center text-lg font-bold mb-8 uppercase tracking-widest">Network Link</h3>
-            <div class="space-y-6">
-                <input type="text" id="config-url-input" class="w-full bg-slate-950 border border-white/10 rounded-2xl px-5 py-4 text-xs font-mono outline-none focus:border-sky-500 text-sky-400 mb-6" placeholder="https://script.google.com/...">
-                <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest">Connect System</button>
-            </div>
+            <div id="preview-content" class="flex-1 overflow-auto p-8 md:p-12"></div>
         </div>
     </div>
 
     <div id="delete-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-        <div class="relative w-full max-w-sm glass-panel rounded-3xl p-10 text-center border border-red-500/20 shadow-2xl">
-            <h3 class="font-orbitron text-lg font-bold mb-3 uppercase text-red-500">Purge Data?</h3>
-            <p class="text-slate-400 text-[10px] uppercase tracking-widest mb-8">Confirmed deletion will remove record from cloud network</p>
-            <div class="flex gap-4">
+        <div class="relative w-full max-w-sm glass-panel rounded-3xl p-10 text-center border border-red-500/20">
+            <h3 class="font-orbitron text-lg font-bold mb-3 uppercase text-red-500 tracking-widest">Purge Data?</h3>
+            <div class="flex gap-4 mt-8">
                 <button onclick="confirmDelete()" id="del-confirm-btn" class="flex-1 bg-red-600 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest">Delete</button>
                 <button onclick="closeDeleteModal()" class="flex-1 bg-white/5 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/5">Cancel</button>
             </div>
         </div>
     </div>
 
+    <div id="config-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="toggleConfig()"></div>
+        <div class="relative w-full max-w-md glass-panel rounded-3xl p-10">
+            <h3 class="font-orbitron text-center text-lg font-bold mb-8 uppercase tracking-widest">System Link</h3>
+            <input type="text" id="config-url-input" class="w-full bg-slate-950 border border-white/10 rounded-2xl px-5 py-4 text-xs font-mono outline-none focus:border-sky-500 text-sky-400 mb-6">
+            <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-[10px] uppercase">Establish Connection</button>
+        </div>
+    </div>
+
     <div id="toast-container" class="fixed bottom-6 right-6 z-[1000] flex flex-col gap-3"></div>
 
     <script>
-        const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbx0qf0An9-I1t8DkRHi0OJuJ-dX3RN_xV3ky5AqlOHsag1O2I8PNZsxsImpx2NlbvLz/exec";
+        const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbx4Q4vkJudnI-oDr7it3E0T_MC7iS4TXBPYutKXi_CaeBn52ry8iebysW6xFH366rua/exec";
         let scriptUrl = localStorage.getItem('skyops_url') || DEFAULT_URL;
         let appData = [];
-        let deleteId = null;
-        let activeItem = null;
-        let selectedModel = null;
-        let selectedType = null;
+        let deleteId = null, activeItem = null, selectedModel = null, selectedType = null;
 
         const HELI_TYPES = ["Bell 412 EP", "AW109"];
         const FW_TYPES = ["Gulfstream IV", "Beechcraft King Air 300", "NC 212-200"];
@@ -364,44 +337,35 @@
         function runBootAnimation() {
             const tl = gsap.timeline({
                 onComplete: () => {
-                    gsap.to("#opening-screen", { opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
+                    gsap.to("#opening-screen", { opacity: 0, duration: 1, onComplete: () => {
                         document.getElementById('opening-screen').classList.add('hide');
                         gsap.to("#app", { opacity: 1, duration: 1 });
                     }});
                 }
             });
-            tl.to("#logo-container", { opacity: 1, scale: 1, duration: 1.5, ease: "expo.out" })
-              .to("#brand-title", { opacity: 1, y: 0, duration: 1 }, "-=1")
-              .to("#brand-subtitle", { opacity: 1, duration: 1 }, "-=0.8")
-              .to("#boot-loader", { opacity: 1, duration: 0.5 }, "-=0.5")
-              .to("#boot-progress", { width: "100%", duration: 2.5, ease: "power3.inOut" });
+            tl.to("#logo-container", { opacity: 1, scale: 1, duration: 1.5 }).to("#brand-title", { opacity: 1, y: 0, duration: 1 }, "-=1").to("#boot-loader", { opacity: 1, duration: 0.5 }, "-=0.5").to("#boot-progress", { width: "100%", duration: 2 });
         }
 
         async function fetchData() {
             if (!scriptUrl) return;
-            showToast("Linking to Databank...", "info");
+            showToast("Syncing mission databank...", "info");
             try {
                 const response = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
                 const result = await response.json();
                 appData = result.data || [];
-                renderUI();
+                renderDocuments();
+                if (selectedModel && selectedType) renderLibraryChecklists();
                 showToast(`System Synced: ${appData.length} records ready`, "success");
-            } catch (error) { showToast("Databank Link Failure", "error"); }
-        }
-
-        function renderUI() {
-            renderDocuments();
-            if (selectedModel && selectedType) renderLibraryChecklists();
+            } catch (error) { showToast("Databank link failure", "error"); }
         }
 
         function selectFleetModel(model) {
             selectedModel = model;
             const dropdown = document.getElementById('library-type-dropdown');
             dropdown.innerHTML = `<option value="" disabled selected>SELECT ${model.toUpperCase()} TYPE</option>`;
-            
             const fromData = [...new Set(appData.filter(item => item.aircraftModel === model).map(item => item.aircraftType))];
             const defaults = model === 'Helicopter' ? HELI_TYPES : FW_TYPES;
-            const combined = [...new Set([...defaults, ...fromData])];
+            const combined = [...new Set([...defaults, ...fromData])].filter(t => t && t !== "undefined");
 
             combined.forEach(type => {
                 const opt = document.createElement('option');
@@ -435,26 +399,16 @@
             const normalContainer = document.getElementById('normal-tabs');
             const emergencyContainer = document.getElementById('emergency-tabs');
             normalContainer.innerHTML = ""; emergencyContainer.innerHTML = "";
-
             const filtered = appData.filter(item => item.aircraftModel === selectedModel && item.aircraftType === selectedType);
-
             filtered.forEach(item => {
                 const type = String(item.type).toLowerCase();
                 const btn = document.createElement('button');
                 btn.className = `tab-btn ${type} group`;
                 btn.onclick = () => openPreview(item);
-                btn.innerHTML = `<div class="flex justify-between items-start w-full">
-                    <span class="text-[8px] font-black opacity-30 group-hover:opacity-100 uppercase ${type === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
-                    <svg class="w-3 h-3 opacity-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3"/></svg>
-                </div>
-                <h4 class="text-[10px] font-bold leading-tight uppercase text-slate-300 group-hover:text-white line-clamp-2">${item.title}</h4>`;
-                
+                btn.innerHTML = `<div class="flex justify-between items-start w-full"><span class="text-[8px] font-black opacity-30 group-hover:opacity-100 uppercase ${type === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span><svg class="w-3 h-3 opacity-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3"/></svg></div><h4 class="text-[10px] font-bold leading-tight uppercase text-slate-300 group-hover:text-white line-clamp-2">${item.title}</h4>`;
                 if (type === 'emergency') emergencyContainer.appendChild(btn);
                 else normalContainer.appendChild(btn);
             });
-
-            if (emergencyContainer.children.length === 0) emergencyContainer.innerHTML = '<p class="col-span-full py-8 text-center text-[9px] text-slate-700 font-bold uppercase border border-dashed border-white/5 rounded-2xl">Empty Dataset</p>';
-            if (normalContainer.children.length === 0) normalContainer.innerHTML = '<p class="col-span-full py-8 text-center text-[9px] text-slate-700 font-bold uppercase border border-dashed border-white/5 rounded-2xl">Empty Dataset</p>';
         }
 
         function renderDocuments() {
@@ -463,16 +417,8 @@
             appData.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-white/[0.02] hover:bg-white/[0.01] transition-colors";
-                tr.innerHTML = `
-                    <td class="p-4"><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">${item.aircraftModel} / ${item.aircraftType}</div></td>
-                    <td class="p-4 text-[10px] font-bold text-sky-500 uppercase">${item.section}</td>
-                    <td class="p-4 font-bold text-slate-200 uppercase text-xs">${item.title}</td>
-                    <td class="p-4 text-right">
-                        <div class="flex justify-end gap-2">
-                            <button onclick="editItem('${item.id}')" class="p-2 text-slate-500 hover:text-sky-400 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                            <button onclick="triggerDelete('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-                        </div>
-                    </td>`;
+                const fleetRef = (item.aircraftModel && item.aircraftType) ? `${item.aircraftModel} / ${item.aircraftType}` : "Incomplete Reference";
+                tr.innerHTML = `<td class="p-4"><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">${fleetRef}</div></td><td class="p-4 text-[10px] font-bold text-sky-500 uppercase">${item.section}</td><td class="p-4 font-bold text-slate-200 uppercase text-xs">${item.title}</td><td class="p-4 text-right"><div class="flex justify-end gap-2"><button onclick="editItem('${item.id}')" class="p-2 text-slate-500 hover:text-sky-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button onclick="triggerDelete('${item.id}')" class="p-2 text-slate-500 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -514,7 +460,6 @@
                 document.getElementById('form-id').value = "";
                 document.getElementById('form-title-heading').innerText = "Initialize Protocol";
                 document.getElementById('cancel-btn').classList.add('hide');
-                document.getElementById('form-aircraft-type-manual').classList.add('hide');
             }
         }
 
@@ -527,13 +472,13 @@
             document.getElementById('form-aircraft-model').value = item.aircraftModel;
             updateFormTypeOptions(item.aircraftModel);
             const typeSelect = document.getElementById('form-aircraft-type-select');
-            const defaults = item.aircraftModel === 'Helicopter' ? HELI_TYPES : FW_TYPES;
-            if(defaults.includes(item.aircraftType)) typeSelect.value = item.aircraftType;
-            else {
+            if (HELI_TYPES.includes(item.aircraftType) || FW_TYPES.includes(item.aircraftType)) {
+                typeSelect.value = item.aircraftType;
+            } else {
                 typeSelect.value = "MANUAL";
-                const manualInput = document.getElementById('form-aircraft-type-manual');
-                manualInput.classList.remove('hide');
-                manualInput.value = item.aircraftType;
+                const man = document.getElementById('form-aircraft-type-manual');
+                man.classList.remove('hide');
+                man.value = item.aircraftType;
             }
             document.getElementById('form-section').value = item.section;
             document.getElementById('form-type').value = item.type;
@@ -546,76 +491,58 @@
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
             btn.disabled = true; btn.innerHTML = "SYNCING...";
-            const typeSelectValue = document.getElementById('form-aircraft-type-select').value;
-            const aircraftTypeFinal = typeSelectValue === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeSelectValue;
+            const typeVal = document.getElementById('form-aircraft-type-select').value;
+            const finalType = typeVal === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeVal;
             
             const payload = {
                 action: document.getElementById('form-id').value ? 'update' : 'create',
                 id: document.getElementById('form-id').value,
                 aircraftModel: document.getElementById('form-aircraft-model').value,
-                aircraftType: aircraftTypeFinal,
+                aircraftType: finalType,
                 section: document.getElementById('form-section').value,
                 type: document.getElementById('form-type').value,
                 title: document.getElementById('form-title').value,
                 content: document.getElementById('form-content').value,
-                fileName: selectedFileName,
-                fileMime: selectedFileType,
-                fileData: selectedFileBase64
+                fileName: selectedFileName, fileMime: selectedFileType, fileData: selectedFileBase64
             };
-
             try {
                 const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await res.json();
-                if (result.status === "success") { showToast("Databank Updated", "success"); switchPage('documents'); fetchData(); }
-            } catch (err) { showToast("Sync Failure", "error"); }
+                if (result.status === "success") { showToast("System Synchronized", "success"); switchPage('documents'); fetchData(); }
+                else throw new Error(result.message);
+            } catch (err) { showToast("Sync Failure: " + err.message, "error"); }
             finally { btn.disabled = false; btn.innerText = "Commit to Cloud"; }
         };
 
         function openPreview(item) {
             activeItem = item;
             const meta = document.getElementById('preview-meta');
-            meta.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.4em] font-bold mb-1">${item.aircraftModel} / ${item.aircraftType} // ${item.section}</p><h3 class="font-bold text-lg md:text-xl font-orbitron text-white uppercase tracking-tight">${item.title}</h3>`;
+            meta.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.4em] font-bold mb-1">${item.aircraftModel} / ${item.aircraftType}</p><h3 class="font-bold text-lg md:text-xl font-orbitron text-white uppercase">${item.title}</h3>`;
             document.getElementById('preview-modal').classList.remove('hide');
             const container = document.getElementById('preview-content');
-            if (item.content) container.innerHTML = parseContent(item.content);
-            else if (item.fileUrl) {
-                if (item.fileType?.includes('pdf')) container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-2xl"></iframe>`;
-                else container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl">`;
-            } else container.innerHTML = '<p class="text-center text-slate-700 uppercase font-bold text-[10px] mt-20 tracking-widest">No Linkage</p>';
-        }
-
-        function parseContent(text) {
-            const lines = text.split('\n');
-            let html = '<div class="space-y-4 font-mono text-xs sm:text-sm">';
-            lines.forEach(line => {
-                const t = line.trim(); if (!t) return;
-                if (t === t.toUpperCase() && !t.includes('☐') && !t.includes('⚠')) {
-                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-10 mb-2 border-b border-white/5 pb-2 uppercase tracking-tighter">${t}</h4>`;
-                } else if (t.includes('⚠') || t.toUpperCase().includes('CAUTION')) {
-                    html += `<div class="caution-alert p-6 rounded-2xl my-6 text-sm flex gap-4 italic uppercase tracking-wider"><span class="text-2xl font-bold">⚠</span><div class="leading-relaxed">${t.replace(/⚠/g, '')}</div></div>`;
-                } else if (t.includes('☐')) {
-                    const parts = t.replace('☐', '').split('—');
-                    html += `<div class="check-item flex items-start gap-4 p-4 rounded-xl cursor-pointer group" onclick="this.classList.toggle('completed')"><div class="mt-1 indicator flex-shrink-0 transition-all group-hover:border-sky-500"></div><div class="flex-1 font-bold uppercase"><span class="text-slate-100 tracking-tight">${parts[0].trim()}</span>${parts[1] ? `<span class="text-slate-600 mx-3 opacity-50">|</span><span class="text-sky-400 text-[10px] tracking-widest">${parts[1].trim()}</span>` : ''}</div></div>`;
-                } else {
-                    html += `<p class="text-slate-500 px-2 leading-relaxed uppercase opacity-60 tracking-wider text-[10px] font-medium">${t}</p>`;
-                }
-            });
-            return html + '</div>';
+            if (item.content) {
+                const lines = item.content.split('\n');
+                let html = '<div class="space-y-4 font-mono text-sm">';
+                lines.forEach(line => {
+                    const t = line.trim(); if (!t) return;
+                    if (t.includes('☐')) html += `<div class="check-item flex items-start gap-4 p-3 rounded-xl cursor-pointer group" onclick="this.classList.toggle('completed')"><div class="mt-1 indicator"></div><div class="flex-1 uppercase font-bold text-slate-100">${t.replace('☐','')}</div></div>`;
+                    else if (t.includes('⚠')) html += `<div class="caution-alert p-5 rounded-2xl italic uppercase text-xs">${t}</div>`;
+                    else html += `<p class="text-slate-500 text-[10px] uppercase px-2">${t}</p>`;
+                });
+                container.innerHTML = html + '</div>';
+            } else if (item.fileUrl) {
+                container.innerHTML = item.fileType?.includes('pdf') ? `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>` : `<img src="${item.fileUrl}" class="max-w-full max-h-full mx-auto rounded-xl">`;
+            }
         }
 
         function downloadCurrentFile() {
             if (!activeItem) return;
             if (activeItem.content) {
                 const element = document.createElement('a');
-                const file = new Blob([activeItem.content], {type: 'text/plain'});
-                element.href = URL.createObjectURL(file);
+                element.href = URL.createObjectURL(new Blob([activeItem.content], {type: 'text/plain'}));
                 element.download = `SkyOps_${activeItem.title.replace(/\s+/g, '_')}.txt`;
-                document.body.appendChild(element);
                 element.click();
-                document.body.removeChild(element);
-            } else if (activeItem.fileUrl) {
-                window.open(activeItem.fileUrl.replace('/preview', '/view').replace('/view', '/uc?export=download'), '_blank');
-            }
+            } else if (activeItem.fileUrl) window.open(activeItem.fileUrl.replace('/preview', '/view').replace('/view', '/uc?export=download'), '_blank');
         }
 
         function triggerDelete(id) { deleteId = id; document.getElementById('delete-modal').classList.remove('hide'); }
@@ -623,12 +550,11 @@
         async function confirmDelete() {
             if (!deleteId) return;
             const btn = document.getElementById('del-confirm-btn');
-            btn.disabled = true; btn.innerText = "PURGING...";
+            btn.disabled = true; btn.innerText = "ERASING...";
             try {
-                const response = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: deleteId }) });
-                const result = await response.json();
-                if (result.status === "success") { showToast("Protocol Purged", "success"); fetchData(); }
-            } catch (e) { showToast("System Interference", "error"); }
+                await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: deleteId }) });
+                showToast("Record Purged", "success"); fetchData();
+            } catch (e) { showToast("Purge failed", "error"); }
             finally { btn.disabled = false; btn.innerText = "Delete"; closeDeleteModal(); }
         }
 
@@ -644,7 +570,7 @@
                 selectedFileName = file.name; selectedFileType = file.type;
                 document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-[10px] uppercase">${file.name}</p>`;
                 const reader = new FileReader();
-                reader.onload = (e) => { selectedFileBase64 = e.target.result.split(',')[1]; };
+                reader.onload = (ev) => { selectedFileBase64 = ev.target.result.split(',')[1]; };
                 reader.readAsDataURL(file);
             }
         };
