@@ -49,56 +49,37 @@
         .tab-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
         .hide { display: none !important; }
         
-        /* Tactical Tab Styles */
+        /* Tactical Tab Styles - UPDATED: Smaller Size */
         .tactical-tab {
             position: relative;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 5.5rem; /* Reduced height */
         }
         .tactical-tab:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
         }
 
-        /* Emergency Red Tab */
-        .tab-emergency {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
-        }
-        .tab-emergency:hover {
-            border-color: var(--emergency);
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(15, 23, 42, 1) 100%);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-        }
-        .tab-emergency::before {
-            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
-            background: var(--emergency); box-shadow: 2px 0 10px var(--emergency);
-        }
+        .tab-emergency { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%); }
+        .tab-emergency:hover { border-color: var(--emergency); background: rgba(239, 68, 68, 0.2); }
+        .tab-emergency::before { content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%; background: var(--emergency); }
 
-        /* Normal Blue Tab */
-        .tab-normal {
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
-        }
-        .tab-normal:hover {
-            border-color: var(--normal);
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(15, 23, 42, 1) 100%);
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
-        }
-        .tab-normal::before {
-            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
-            background: var(--normal); box-shadow: 2px 0 10px var(--normal);
-        }
+        .tab-normal { background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%); }
+        .tab-normal:hover { border-color: var(--normal); background: rgba(14, 165, 233, 0.15); }
+        .tab-normal::before { content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%; background: var(--normal); }
+
+        /* Data Management Table */
+        .mgmt-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .mgmt-table td { padding: 1rem; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .mgmt-row:hover { background: rgba(255,255,255,0.02); }
 
         .check-item { transition: all 0.2s; border-left: 2px solid transparent; }
         .check-item:hover { background: rgba(255,255,255,0.03); border-left-color: var(--primary); }
         .check-item.completed { opacity: 0.4; text-decoration: line-through; border-left-color: #22c55e; }
         
-        .caution-box {
-            background: rgba(245, 158, 11, 0.08);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            color: #fbbf24;
-        }
-
+        .caution-box { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); color: #fbbf24; }
         .pulse-loading { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
     </style>
@@ -109,14 +90,13 @@
     <div id="opening-screen">
         <div class="scanline"></div>
         <div class="relative flex flex-col items-center text-center px-6">
-            <div id="opening-logo" class="w-24 h-24 mb-6 opacity-0 scale-50">
+            <div id="opening-logo" class="w-20 h-20 mb-6 opacity-0 scale-50">
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(14,165,233,0.4)]">
             </div>
-            <h1 id="opening-title" class="font-orbitron text-3xl font-bold tracking-widest text-white opacity-0 translate-y-10 uppercase">
+            <h1 id="opening-title" class="font-orbitron text-2xl font-bold tracking-widest text-white opacity-0 translate-y-10 uppercase">
                 SkyOps <span class="text-sky-500">Protocol</span>
             </h1>
-            <p id="opening-subtitle" class="mt-2 text-sky-400/60 tracking-[0.4em] uppercase text-[9px] opacity-0">Advanced Flight Management</p>
-            <div id="progress-bar-container" class="w-48 h-0.5 bg-slate-900 mt-12 rounded-full overflow-hidden opacity-0">
+            <div id="progress-bar-container" class="w-40 h-0.5 bg-slate-900 mt-10 rounded-full overflow-hidden opacity-0">
                 <div id="progress-bar" class="w-0 h-full bg-sky-500 shadow-[0_0_15px_#0ea5e9]"></div>
             </div>
         </div>
@@ -129,138 +109,166 @@
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" class="h-8 w-8" alt="Logo">
                 <span class="font-orbitron font-bold text-lg tracking-tighter">SKYOPS</span>
             </div>
-            <div class="flex gap-4 sm:gap-8 text-xs font-bold items-center tracking-widest uppercase">
+            <div class="flex gap-4 sm:gap-6 text-[10px] font-bold items-center tracking-widest uppercase">
                 <button onclick="switchPage('library')" id="nav-library" class="nav-btn tab-active py-5 transition-all">Library</button>
-                <button onclick="switchPage('add')" id="nav-add" class="nav-btn text-slate-500 py-5 transition-all">Add System</button>
-                <div class="h-4 w-[1px] bg-white/10 mx-2"></div>
+                <button onclick="switchPage('documents')" id="nav-documents" class="nav-btn text-slate-500 py-5 transition-all">Documents</button>
+                <button onclick="switchPage('add')" id="nav-add" class="nav-btn text-slate-500 py-5 transition-all">Add New</button>
+                <div class="h-4 w-[1px] bg-white/10 mx-1"></div>
                 <button onclick="fetchData()" class="p-2 text-slate-500 hover:text-sky-400 transition-all"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg></button>
                 <button onclick="toggleConfig()" class="p-2 text-slate-500 hover:text-white transition-all"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></button>
             </div>
         </nav>
 
         <main class="max-w-7xl mx-auto px-6 mt-8">
-            <!-- Page: Library -->
-            <div id="page-library" class="space-y-12">
-                
-                <!-- Emergency Procedures Section -->
+            <!-- Page: Library (Smaller Tabs) -->
+            <div id="page-library" class="space-y-10">
                 <section>
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="flex items-center gap-4">
-                            <div class="w-3 h-10 bg-red-600 rounded-sm shadow-[0_0_15px_#ef4444]"></div>
-                            <div>
-                                <h2 class="text-2xl font-bold font-orbitron text-red-500 tracking-tighter uppercase">Emergency Operations</h2>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Immediate Response Required</p>
-                            </div>
-                        </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-2 h-6 bg-red-600 shadow-[0_0_10px_#ef4444]"></div>
+                        <h2 class="text-lg font-bold font-orbitron text-red-500 uppercase tracking-tighter">Emergency Tabs</h2>
                     </div>
-                    <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <!-- Emergency Tabs Generated Here -->
-                    </div>
+                    <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
                 </section>
-
-                <div class="border-t border-white/5 my-12"></div>
-
-                <!-- Normal Procedures Section -->
                 <section>
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-3 h-10 bg-sky-600 rounded-sm shadow-[0_0_15px_#0ea5e9]"></div>
-                        <div>
-                            <h2 class="text-2xl font-bold font-orbitron text-sky-500 tracking-tighter uppercase">Standard Protocols</h2>
-                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Normal Flight Phases</p>
-                        </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-2 h-6 bg-sky-600 shadow-[0_0_10px_#0ea5e9]"></div>
+                        <h2 class="text-lg font-bold font-orbitron text-sky-500 uppercase tracking-tighter">Normal Tabs</h2>
                     </div>
-                    <div id="normal-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <!-- Normal Tabs Generated Here -->
-                    </div>
+                    <div id="normal-tabs" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
                 </section>
             </div>
 
-            <!-- Page: Add Prodecure -->
+            <!-- Page: Documents Management -->
+            <div id="page-documents" class="hide space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h2 class="text-2xl font-bold font-orbitron uppercase tracking-tighter">Management Databank</h2>
+                        <p class="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase">Update, Edit, or Delete Protocols</p>
+                    </div>
+                    <button onclick="switchPage('add')" class="bg-sky-600/20 text-sky-400 border border-sky-500/30 px-4 py-2 rounded-lg text-[10px] font-bold uppercase hover:bg-sky-600 transition-all hover:text-white">New Entry</button>
+                </div>
+
+                <div class="space-y-10">
+                    <!-- Emergency Section -->
+                    <div class="glass-morphism rounded-2xl overflow-hidden">
+                        <div class="bg-red-500/10 px-6 py-3 border-b border-white/5 flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-red-400 uppercase tracking-widest">Emergency Records</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="mgmt-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Procedure Title</th>
+                                        <th>Date Added</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mgmt-emergency-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Normal Section -->
+                    <div class="glass-morphism rounded-2xl overflow-hidden">
+                        <div class="bg-sky-500/10 px-6 py-3 border-b border-white/5 flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-sky-400 uppercase tracking-widest">Normal Operations Records</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="mgmt-table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Procedure Title</th>
+                                        <th>Date Added</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mgmt-normal-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page: Add/Edit Prodecure -->
             <div id="page-add" class="hide max-w-4xl mx-auto">
                 <div class="glass-morphism rounded-2xl p-8 space-y-8">
                     <div class="border-b border-white/10 pb-6 text-center">
-                        <h2 class="text-2xl font-bold font-orbitron tracking-widest">ADD NEW PROCEDURE</h2>
-                        <p class="text-slate-500 text-[10px] uppercase font-bold mt-2">Initialize new mission parameters into the databank</p>
+                        <h2 id="form-heading" class="text-2xl font-bold font-orbitron tracking-widest uppercase">Add New Procedure</h2>
+                        <p class="text-slate-500 text-[10px] uppercase font-bold mt-2">Protocol synchronization module</p>
                     </div>
 
                     <form id="checklist-form" class="space-y-6">
+                        <input type="hidden" id="form-id">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Mission Section</label>
-                                <input type="text" id="form-section" placeholder="e.g. Engine / Cockpit" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Section</label>
+                                <input type="text" id="form-section" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all text-sm">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Operation Mode</label>
-                                <select id="form-type" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium appearance-none">
+                                <select id="form-type" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all text-sm appearance-none">
                                     <option value="Normal">NORMAL PROCEDURE</option>
                                     <option value="Emergency">EMERGENCY PROCEDURE</option>
                                 </select>
                             </div>
                         </div>
-                        
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Procedure Title</label>
-                            <input type="text" id="form-title" placeholder="e.g. Engine Failure Recovery" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-medium">
+                            <input type="text" id="form-title" required class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all text-sm">
                         </div>
-
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2">Interactive Data (Smart Text)</label>
-                            <textarea id="form-content" rows="6" placeholder="☐ System Check — OK&#10;⚠ CAUTION: High Pressure" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-mono text-sm"></textarea>
+                            <textarea id="form-content" rows="6" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 outline-none focus:border-sky-500 transition-all font-mono text-sm"></textarea>
                         </div>
-
-                        <div class="relative py-4">
-                            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
-                            <div class="relative flex justify-center text-[9px] uppercase font-bold text-slate-600 bg-[#020617] px-4 tracking-[0.3em]">OR ATTACH LEGACY FILE</div>
-                        </div>
-
-                        <div id="drop-area" class="border-2 border-dashed border-white/10 rounded-2xl p-10 text-center cursor-pointer hover:border-sky-500/50 transition-all group bg-white/[0.01]">
+                        <div id="drop-area" class="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center cursor-pointer hover:border-sky-500/50 transition-all group bg-white/[0.01]">
                             <input type="file" id="form-file" class="hidden" accept="image/*,application/pdf">
                             <div id="file-info" class="text-slate-500">
-                                <svg class="h-10 w-10 mx-auto mb-4 opacity-30 group-hover:text-sky-500 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                                <p class="text-xs uppercase font-bold tracking-widest">Drop Mission Documents Here</p>
+                                <p class="text-xs uppercase font-bold tracking-widest">Update/Attach File</p>
                             </div>
                         </div>
-
-                        <button type="submit" id="submit-btn" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-5 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(14,165,233,0.5)] uppercase tracking-[0.2em] text-xs">
-                            Sync to System Databank
-                        </button>
+                        <div class="flex gap-4">
+                            <button type="submit" id="submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-5 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(14,165,233,0.5)] uppercase tracking-[0.2em] text-xs">Sync Databank</button>
+                            <button type="button" onclick="switchPage('documents')" id="cancel-btn" class="hide px-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/10">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Preview Viewer -->
-    <div id="preview-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4 sm:p-10">
+    <!-- Modals (Preview & Delete) -->
+    <div id="preview-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-[#020617]/95 backdrop-blur-md" onclick="closePreview()"></div>
-        <div class="relative w-full max-w-5xl h-full glass-morphism rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-white/10">
+        <div class="relative w-full max-w-5xl h-[90vh] glass-morphism rounded-3xl overflow-hidden flex flex-col border border-white/10">
             <div class="flex items-center justify-between p-6 border-b border-white/10 bg-black/20">
-                <div>
-                    <p id="preview-section" class="text-[9px] uppercase text-sky-500 tracking-[0.3em] font-bold mb-1"></p>
-                    <h3 id="preview-title" class="font-bold text-xl font-orbitron text-white uppercase">Procedure View</h3>
-                </div>
-                <button onclick="closePreview()" class="p-3 hover:bg-white/5 rounded-full transition-all text-slate-400 hover:text-white">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+                <div id="preview-header"></div>
+                <button onclick="closePreview()" class="p-3 hover:bg-white/5 rounded-full text-slate-400 transition-all"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
-            <div id="preview-container" class="flex-1 overflow-auto p-8 sm:p-12">
-                <!-- Data Content -->
-            </div>
-            <div class="p-6 border-t border-white/5 text-center bg-black/40">
-                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.4em]">Flight System Active • Digital Copy Only</p>
+            <div id="preview-container" class="flex-1 overflow-auto p-8 sm:p-12"></div>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="fixed inset-0 z-[110] hide flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-sm glass-morphism rounded-3xl p-8 text-center">
+            <div class="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6"><svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg></div>
+            <h3 class="text-xl font-bold font-orbitron mb-2">ERASE PROTOCOL?</h3>
+            <p class="text-slate-400 text-xs mb-8">This action is irreversible and will remove the data from the cloud system.</p>
+            <div class="flex gap-4">
+                <button onclick="confirmDelete()" id="del-btn-confirm" class="flex-1 bg-red-600 py-4 rounded-xl text-xs font-bold uppercase tracking-widest">Delete</button>
+                <button onclick="closeDeleteModal()" class="flex-1 bg-white/5 py-4 rounded-xl text-xs font-bold uppercase tracking-widest">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Configuration -->
     <div id="config-modal" class="fixed inset-0 z-[100] hide flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleConfig()"></div>
         <div class="relative w-full max-w-md glass-morphism rounded-3xl p-8 shadow-2xl">
-            <h3 class="text-xl font-bold font-orbitron mb-6 text-center tracking-widest">DATABASE LINK</h3>
-            <div class="space-y-6">
-                <input type="text" id="config-url" placeholder="https://script.google.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-4 text-sm focus:border-sky-500 outline-none text-sky-400">
-                <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest">Connect to Network</button>
-            </div>
+            <h3 class="text-xl font-bold font-orbitron mb-6 text-center tracking-widest uppercase">Database Link</h3>
+            <input type="text" id="config-url" placeholder="https://script.google.com/..." class="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-4 text-sm focus:border-sky-500 outline-none text-sky-400 mb-6">
+            <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest">Connect Network</button>
         </div>
     </div>
 
@@ -269,6 +277,7 @@
     <script>
         let appData = [];
         let scriptUrl = localStorage.getItem('skyops_url') || "";
+        let deleteId = null;
 
         window.onload = () => {
             if (scriptUrl) {
@@ -283,126 +292,133 @@
         function startOpeningAnimation() {
             const tl = gsap.timeline({
                 onComplete: () => {
-                    gsap.to("#opening-screen", { opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
+                    gsap.to("#opening-screen", { opacity: 0, duration: 1, ease: "power4.inOut", onComplete: () => {
                         document.getElementById('opening-screen').classList.add('hide');
-                        gsap.to("#app", { opacity: 1, duration: 1 });
+                        gsap.to("#app", { opacity: 1, duration: 0.8 });
                     }});
                 }
             });
             tl.to("#opening-logo", { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.7)" })
               .to("#opening-title", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5")
-              .to("#opening-subtitle", { opacity: 1, duration: 0.8 }, "-=0.4")
               .to("#progress-bar-container", { opacity: 1, duration: 0.5 }, "-=0.3")
-              .to("#progress-bar", { width: "100%", duration: 3, ease: "power2.inOut" });
+              .to("#progress-bar", { width: "100%", duration: 2.5, ease: "power2.inOut" });
         }
 
         async function fetchData() {
             if (!scriptUrl) return;
-            showToast("Syncing with Global Network...", "info");
+            showToast("Syncing with Databank...", "info");
             try {
                 const response = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
                 const result = await response.json();
                 appData = result.data || [];
                 renderLibrary();
-                showToast(`Sync Complete: ${appData.length} entries found`, "success");
+                renderDocuments();
+                showToast(`Sync Complete: ${appData.length} records`, "success");
             } catch (error) {
-                showToast("Network Link Error", "error");
+                showToast("Network Error", "error");
             }
         }
 
         function renderLibrary() {
             const containerNormal = document.getElementById('normal-tabs');
             const containerEmergency = document.getElementById('emergency-tabs');
-            
             containerNormal.innerHTML = "";
             containerEmergency.innerHTML = "";
 
-            const normals = appData.filter(item => String(item.type).toLowerCase() === "normal");
-            const emergencies = appData.filter(item => String(item.type).toLowerCase() === "emergency");
-
-            // Render Emergency Tabs
-            if (emergencies.length > 0) {
-                emergencies.forEach(item => containerEmergency.appendChild(createTacticalTab(item, 'emergency')));
-            } else {
-                containerEmergency.innerHTML = '<div class="col-span-full py-10 text-center text-slate-700 italic text-[10px] uppercase tracking-widest border border-dashed border-white/5 rounded-xl">No Emergency Procedures Stored</div>';
-            }
-
-            // Render Normal Tabs
-            if (normals.length > 0) {
-                normals.forEach(item => containerNormal.appendChild(createTacticalTab(item, 'normal')));
-            } else {
-                containerNormal.innerHTML = '<div class="col-span-full py-10 text-center text-slate-700 italic text-[10px] uppercase tracking-widest border border-dashed border-white/5 rounded-xl">No Normal Procedures Stored</div>';
-            }
-        }
-
-        function createTacticalTab(item, mode) {
-            const btn = document.createElement('button');
-            btn.className = `tactical-tab tab-${mode} p-6 rounded-2xl text-left flex flex-col justify-between h-32 group`;
-            btn.onclick = () => openPreview(item);
-            
-            btn.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <span class="text-[8px] font-black uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-all ${mode === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
-                    <svg class="h-4 w-4 opacity-20 group-hover:opacity-100 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </div>
-                <h4 class="text-xs font-bold leading-snug uppercase tracking-wider text-slate-200 group-hover:text-white line-clamp-2">${item.title}</h4>
-            `;
-            return btn;
-        }
-
-        function parseChecklistText(text) {
-            const lines = text.split('\n');
-            let html = '<div class="space-y-6 font-mono">';
-            lines.forEach((line) => {
-                const trimmed = line.trim();
-                if (!trimmed) return;
-
-                if (trimmed === trimmed.toUpperCase() && !trimmed.includes('☐') && !trimmed.includes('⚠')) {
-                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-10 mb-4 border-b border-sky-500/10 pb-3 tracking-tighter">${trimmed}</h4>`;
-                } else if (trimmed.includes('⚠') || trimmed.toUpperCase().includes('CAUTION:')) {
-                    html += `<div class="caution-box p-6 rounded-2xl my-6 text-sm flex gap-4 italic"><span class="text-2xl">⚠</span><div>${trimmed.replace(/⚠/g, '').replace(/CAUTION:/gi, '<strong>CAUTION:</strong>')}</div></div>`;
-                } else if (trimmed.includes('☐') || trimmed.startsWith('-') || trimmed.startsWith('•')) {
-                    const cleanText = trimmed.replace(/[☐\-•]/g, '').trim();
-                    const parts = cleanText.split('—');
-                    html += `<div class="check-item flex items-start gap-5 p-4 rounded-xl cursor-pointer" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded-md border border-slate-800 flex items-center justify-center flex-shrink-0 group-hover:border-sky-500"><div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div></div><div class="flex-1 text-sm"><span class="text-slate-100 font-medium">${parts[0]}</span>${parts[1] ? `<span class="text-slate-600 mx-3">|</span><span class="text-sky-400/70 uppercase text-[11px] font-bold">${parts[1]}</span>` : ''}</div></div>`;
-                } else {
-                    html += `<p class="text-slate-400 text-xs px-2 leading-relaxed opacity-60">${trimmed}</p>`;
-                }
+            appData.forEach(item => {
+                const mode = String(item.type).toLowerCase();
+                const btn = document.createElement('button');
+                btn.className = `tactical-tab tab-${mode} p-4 rounded-xl text-left flex flex-col justify-between group`;
+                btn.onclick = () => openPreview(item);
+                btn.innerHTML = `
+                    <span class="text-[8px] font-black uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-all ${mode === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
+                    <h4 class="text-[11px] font-bold leading-tight uppercase text-slate-200 group-hover:text-white line-clamp-2">${item.title}</h4>
+                `;
+                if(mode === 'emergency') containerEmergency.appendChild(btn);
+                else containerNormal.appendChild(btn);
             });
-            return html + '</div>';
         }
 
-        function openPreview(item) {
-            const modal = document.getElementById('preview-modal');
-            const container = document.getElementById('preview-container');
-            document.getElementById('preview-title').innerText = item.title;
-            document.getElementById('preview-section').innerText = `${item.section} // ${item.type} PHASE`;
-            modal.classList.remove('hide');
-            
-            if (item.content) {
-                container.innerHTML = parseChecklistText(item.content);
-            } else if (item.fileUrl) {
-                if (item.fileType && item.fileType.includes('pdf')) {
-                    container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>`;
-                } else {
-                    container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl shadow-2xl">`;
-                }
-            } else {
-                container.innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-20"><svg class="h-20 w-20 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><p class="font-bold uppercase tracking-[0.3em]">No Data Link Available</p></div>';
+        function renderDocuments() {
+            const listNormal = document.getElementById('mgmt-normal-list');
+            const listEmergency = document.getElementById('mgmt-emergency-list');
+            listNormal.innerHTML = "";
+            listEmergency.innerHTML = "";
+
+            appData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "mgmt-row";
+                const date = item.date ? new Date(item.date).toLocaleDateString('id-ID') : '-';
+                tr.innerHTML = `
+                    <td><span class="bg-white/5 px-2 py-1 rounded text-slate-400">${item.section}</span></td>
+                    <td class="font-bold">${item.title}</td>
+                    <td class="text-slate-500">${date}</td>
+                    <td class="text-right flex justify-end gap-2">
+                        <button onclick="editItem('${item.id}')" class="p-2 text-sky-400 hover:bg-sky-400/10 rounded transition-all" title="Edit"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg></button>
+                        <button onclick="openDeleteModal('${item.id}')" class="p-2 text-red-400 hover:bg-red-400/10 rounded transition-all" title="Delete"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg></button>
+                    </td>
+                `;
+                if(String(item.type).toLowerCase() === 'emergency') listEmergency.appendChild(tr);
+                else listNormal.appendChild(tr);
+            });
+        }
+
+        function switchPage(page) {
+            ['library', 'documents', 'add'].forEach(p => {
+                document.getElementById(`page-${p}`).classList.add('hide');
+                document.getElementById(`nav-${p}`)?.classList.remove('tab-active');
+                document.getElementById(`nav-${p}`)?.classList.add('text-slate-500');
+            });
+            document.getElementById(`page-${page}`).classList.remove('hide');
+            document.getElementById(`nav-${page}`)?.classList.add('tab-active');
+            document.getElementById(`nav-${page}`)?.classList.remove('text-slate-500');
+
+            if(page === 'add') {
+                document.getElementById('checklist-form').reset();
+                document.getElementById('form-id').value = "";
+                document.getElementById('form-heading').innerText = "Add New Procedure";
+                document.getElementById('cancel-btn').classList.add('hide');
+                document.getElementById('file-info').innerHTML = '<p class="text-xs uppercase font-bold tracking-widest">Update/Attach File</p>';
             }
         }
 
-        // Form Submit
+        function editItem(id) {
+            const item = appData.find(i => i.id === id);
+            if(!item) return;
+            switchPage('add');
+            document.getElementById('form-heading').innerText = "Edit Protocol";
+            document.getElementById('form-id').value = item.id;
+            document.getElementById('form-section').value = item.section;
+            document.getElementById('form-type').value = item.type;
+            document.getElementById('form-title').value = item.title;
+            document.getElementById('form-content').value = item.content || "";
+            document.getElementById('cancel-btn').classList.remove('hide');
+            if(item.fileUrl) document.getElementById('file-info').innerHTML = '<p class="text-[10px] text-sky-400">Current file exists. Upload new to replace.</p>';
+        }
+
+        function openDeleteModal(id) { deleteId = id; document.getElementById('delete-modal').classList.remove('hide'); }
+        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hide'); }
+
+        async function confirmDelete() {
+            if(!deleteId) return;
+            const btn = document.getElementById('del-btn-confirm');
+            btn.disabled = true; btn.innerText = "ERASING...";
+            try {
+                const response = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: deleteId }) });
+                const result = await response.json();
+                if(result.status === "success") { showToast("Record Erased", "success"); fetchData(); }
+            } catch (e) { showToast("Delete Failed", "error"); }
+            finally { btn.disabled = false; btn.innerText = "Delete"; closeDeleteModal(); }
+        }
+
         document.getElementById('checklist-form').onsubmit = async (e) => {
             e.preventDefault();
-            if (!scriptUrl) return toggleConfig();
-            
             const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-            btn.innerHTML = `<span class="pulse-loading tracking-[0.3em]">Establishing Uplink...</span>`;
-
+            btn.disabled = true; btn.innerHTML = '<span class="pulse-loading">SYNCING...</span>';
+            
             const payload = {
-                action: 'create',
+                action: document.getElementById('form-id').value ? 'update' : 'create',
+                id: document.getElementById('form-id').value,
                 section: document.getElementById('form-section').value,
                 type: document.getElementById('form-type').value,
                 title: document.getElementById('form-title').value,
@@ -413,61 +429,66 @@
             };
 
             try {
-                const response = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
-                const result = await response.json();
-                if (result.status === "success") {
-                    showToast("Protocol Successfully Synchronized", "success");
-                    document.getElementById('checklist-form').reset();
-                    selectedFileBase64 = null;
-                    document.getElementById('file-info').innerHTML = `<p class="text-xs uppercase font-bold tracking-widest">Drop Mission Documents Here</p>`;
-                    switchPage('library');
+                const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
+                const result = await res.json();
+                if(result.status === "success") {
+                    showToast("Synchronized", "success");
+                    switchPage('documents');
                     fetchData();
                 }
-            } catch (error) {
-                showToast("Transmission Interference Detected", "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `Sync to System Databank`;
-            }
+            } catch (err) { showToast("Link Error", "error"); }
+            finally { btn.disabled = false; btn.innerText = "Sync Databank"; }
         };
 
-        // File Handler
-        const fileInput = document.getElementById('form-file');
+        function parseChecklistText(text) {
+            const lines = text.split('\n');
+            let html = '<div class="space-y-6 font-mono">';
+            lines.forEach(line => {
+                const t = line.trim(); if(!t) return;
+                if(t === t.toUpperCase() && !t.includes('☐') && !t.includes('⚠')) html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-8 mb-4 border-b border-sky-500/10 pb-3">${t}</h4>`;
+                else if(t.includes('⚠')) html += `<div class="caution-box p-6 rounded-2xl my-6 text-sm flex gap-4 italic"><span class="text-2xl">⚠</span><div>${t.replace(/⚠/g, '')}</div></div>`;
+                else if(t.includes('☐')) {
+                    const parts = t.replace('☐', '').split('—');
+                    html += `<div class="check-item flex items-start gap-4 p-3 rounded-xl cursor-pointer" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded border border-slate-700 flex items-center justify-center flex-shrink-0"><div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div></div><div class="flex-1 text-sm"><span class="text-slate-100">${parts[0]}</span>${parts[1] ? `<span class="text-slate-500 mx-3">|</span><span class="text-sky-400 font-bold uppercase text-[10px]">${parts[1]}</span>` : ''}</div></div>`;
+                } else html += `<p class="text-slate-400 text-xs px-2 opacity-60">${t}</p>`;
+            });
+            return html + '</div>';
+        }
+
+        function openPreview(item) {
+            const modal = document.getElementById('preview-modal');
+            const container = document.getElementById('preview-container');
+            const header = document.getElementById('preview-header');
+            header.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.3em] font-bold mb-1">${item.section} // ${item.type}</p><h3 class="font-bold text-xl font-orbitron text-white uppercase">${item.title}</h3>`;
+            modal.classList.remove('hide');
+            if(item.content) container.innerHTML = parseChecklistText(item.content);
+            else if(item.fileUrl) {
+                if(item.fileType?.includes('pdf')) container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>`;
+                else container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl">`;
+            } else container.innerHTML = '<p class="text-center text-slate-500 italic mt-20">No protocol data found.</p>';
+        }
+
+        function closePreview() { document.getElementById('preview-modal').classList.add('hide'); }
+        function toggleConfig() { document.getElementById('config-modal').classList.toggle('hide'); }
+        function saveConfig() { localStorage.setItem('skyops_url', document.getElementById('config-url').value.trim()); location.reload(); }
+        
         let selectedFileBase64 = null, selectedFileName = "", selectedFileType = "";
-        document.getElementById('drop-area').onclick = () => fileInput.click();
-        fileInput.onchange = (e) => {
+        document.getElementById('drop-area').onclick = () => document.getElementById('form-file').click();
+        document.getElementById('form-file').onchange = (e) => {
             const file = e.target.files[0];
-            if (file) {
-                selectedFileName = file.name;
-                selectedFileType = file.type;
-                document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-xs uppercase tracking-widest">${file.name}</p><p class="text-[9px] mt-1 text-slate-600">Attached & Ready</p>`;
+            if(file) {
+                selectedFileName = file.name; selectedFileType = file.type;
+                document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-xs uppercase">${file.name}</p>`;
                 const reader = new FileReader();
                 reader.onload = (e) => { selectedFileBase64 = e.target.result.split(',')[1]; };
                 reader.readAsDataURL(file);
             }
         };
 
-        function switchPage(page) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('tab-active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-slate-500'));
-            
-            document.getElementById('page-library').classList.add('hide');
-            document.getElementById('page-add').classList.add('hide');
-            
-            document.getElementById(`page-${page}`).classList.remove('hide');
-            document.getElementById(`nav-${page}`).classList.add('tab-active');
-            document.getElementById(`nav-${page}`).classList.remove('text-slate-500');
-        }
-        function toggleConfig() { document.getElementById('config-modal').classList.toggle('hide'); }
-        function saveConfig() {
-            localStorage.setItem('skyops_url', document.getElementById('config-url').value.trim());
-            location.reload();
-        }
-        function closePreview() { document.getElementById('preview-modal').classList.add('hide'); }
         function showToast(m, t) {
             const toast = document.createElement('div');
             const c = { success: 'border-green-500 text-green-500', error: 'border-red-500 text-red-500', info: 'border-sky-500 text-sky-500' };
-            toast.className = `px-6 py-4 rounded-xl border glass-morphism ${c[t]} font-bold text-[10px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase`;
+            toast.className = `px-6 py-3 rounded-xl border glass-morphism ${c[t]} font-bold text-[10px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase`;
             toast.innerText = m;
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 100);
