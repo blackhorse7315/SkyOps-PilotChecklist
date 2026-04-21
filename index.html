@@ -3,497 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyOps Pilot Checklist | Professional Aviation Suite</title>
+    <title>SkyOps Pilot Checklist | Professional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF">
-    <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0ea5e9;
-            --primary-glow: rgba(14, 165, 233, 0.3);
-            --emergency: #ef4444;
-            --bg-base: #020617;
-            --surface: rgba(15, 23, 42, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-base);
-            color: #f8fafc;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
+        :root { --primary: #0ea5e9; --emergency: #ef4444; --bg: #020617; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #f8fafc; overflow-x: hidden; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .font-mono { font-family: 'JetBrains+Mono', monospace; }
-
-        .glass-panel {
-            background: var(--surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-        }
-
-        /* Opening Screen */
-        #opening-screen {
-            position: fixed; inset: 0; z-index: 1000;
-            background: #020617;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-
-        .scanline {
-            width: 100%; height: 2px;
-            background: linear-gradient(to right, transparent, var(--primary), transparent);
-            position: absolute; top: 0; opacity: 0.3;
-            animation: scan 4s linear infinite;
-        }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        /* Navigation */
-        .nav-link { position: relative; transition: all 0.3s ease; letter-spacing: 0.1em; }
-        .nav-link.active { color: var(--primary); }
-        .nav-link.active::after {
-            content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px;
-            background: var(--primary); box-shadow: 0 0 10px var(--primary);
-            border-radius: 2px;
-        }
-
-        /* Tactical Tabs */
-        .tab-btn {
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            height: 5rem;
-            display: flex; flex-direction: column; justify-content: space-between;
-            padding: 1rem; border-radius: 12px;
-        }
-        .tab-btn:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); }
-        .tab-btn.emergency::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--emergency); box-shadow: 0 0 10px var(--emergency); border-radius: 0 4px 4px 0; }
-        .tab-btn.normal::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--primary); box-shadow: 0 0 10px var(--primary); border-radius: 0 4px 4px 0; }
-
-        /* Modern Text-Only Model Cards */
-        .model-card {
-            background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.03) 0%, rgba(2, 6, 23, 0.8) 100%);
-            border: 1px solid var(--border);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 180px;
-        }
-        .model-card:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-5px); 
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(14, 165, 233, 0.1); 
-        }
-        .model-card h3 { transition: all 0.3s ease; }
-        .model-card:hover h3 { color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
-
-        .check-item { transition: all 0.2s ease; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-        .check-item:hover { background: rgba(255, 255, 255, 0.02); }
-        .check-item.completed { opacity: 0.3; }
-        .indicator { width: 1.25rem; height: 1.25rem; border: 1.5px solid #334155; border-radius: 4px; position: relative; }
-        .check-item.completed .indicator { background: #22c55e; border-color: #22c55e; }
-
-        .caution-alert { background: rgba(245, 158, 11, 0.05); border-left: 4px solid #f59e0b; color: #f59e0b; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .model-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(2, 6, 23, 0.8)); border: 1px solid rgba(255,255,255,0.08); transition: all 0.4s; cursor: pointer; }
+        .model-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(14, 165, 233, 0.1); }
+        .tab-btn { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; }
+        .tab-btn.emergency::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 3px; background: var(--emergency); }
+        .tab-btn.normal::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 3px; background: var(--primary); }
         .hide { display: none !important; }
-        select option { background: #0f172a; color: white; }
+        .nav-link.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
     </style>
 </head>
-<body class="no-scrollbar">
+<body>
 
-    <!-- Opening Screen -->
-    <div id="opening-screen">
-        <div class="scanline"></div>
-        <div class="relative flex flex-col items-center">
-            <div id="logo-container" class="w-20 h-20 mb-8 opacity-0 scale-90">
-                <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="SkyOps Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_20px_var(--primary-glow)]">
-            </div>
-            <h1 id="brand-title" class="font-orbitron text-2xl font-bold tracking-[0.4em] text-white opacity-0 translate-y-4 uppercase">SkyOps</h1>
-            <div id="boot-loader" class="w-40 h-[1px] bg-slate-900 mt-10 overflow-hidden opacity-0">
-                <div id="boot-progress" class="w-0 h-full bg-sky-500 shadow-[0_0_15px_#0ea5e9]"></div>
-            </div>
-        </div>
+    <div id="opening-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center">
+        <h1 class="font-orbitron text-4xl font-bold tracking-widest animate-pulse">SKYOPS</h1>
+        <div class="w-48 h-1 bg-slate-900 mt-8 overflow-hidden rounded-full"><div id="boot-bar" class="w-0 h-full bg-sky-500"></div></div>
     </div>
 
-    <!-- Main App Shell -->
-    <div id="app" class="min-h-screen opacity-0 transition-opacity duration-1000">
-        <nav class="fixed top-0 inset-x-0 h-16 glass-panel z-50 flex items-center justify-between px-4 md:px-8">
-            <div class="flex items-center gap-3">
-                <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" class="h-8 w-8" alt="Logo">
-                <span class="font-orbitron font-bold text-lg tracking-tighter uppercase">SkyOps</span>
-            </div>
-            <div class="flex items-center gap-6 md:gap-10 text-[10px] font-bold uppercase tracking-widest">
+    <div id="app" class="opacity-0 min-h-screen pt-20 pb-10">
+        <nav class="fixed top-0 inset-x-0 h-16 glass z-50 flex items-center justify-between px-6">
+            <span class="font-orbitron font-bold text-lg tracking-tighter">SKYOPS</span>
+            <div class="flex gap-6 text-[10px] font-bold uppercase tracking-widest">
                 <button onclick="switchPage('library')" id="nav-library" class="nav-link active">Library</button>
-                <button onclick="switchPage('documents')" id="nav-documents" class="nav-link text-slate-500">Databank</button>
-                <button onclick="switchPage('add')" id="nav-add" class="nav-link text-slate-500">Initialize</button>
-                <div class="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
-                <div class="flex items-center gap-4">
-                    <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
-                    <button onclick="toggleConfig()" class="text-slate-500 hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                </div>
+                <button onclick="switchPage('documents')" id="nav-documents" class="nav-link">Databank</button>
+                <button onclick="switchPage('add')" id="nav-add" class="nav-link">Initialize</button>
+                <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400">Sync</button>
             </div>
         </nav>
 
-        <main class="pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
-            
-            <!-- LIBRARY -->
+        <main class="max-w-7xl mx-auto px-6">
             <div id="page-library" class="space-y-12">
                 <div id="selection-model" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto pt-10">
-                    <div onclick="selectFleetModel('Helicopter')" class="model-card p-12 rounded-[2rem] group">
-                        <h3 class="font-orbitron text-2xl font-bold tracking-[0.4em] uppercase">HELICOPTER</h3>
-                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-3">Rotary Wing Fleet</p>
+                    <div onclick="selectFleetModel('Helicopter')" class="model-card p-16 rounded-3xl text-center">
+                        <h3 class="font-orbitron text-3xl font-bold tracking-widest">HELICOPTER</h3>
+                        <p class="text-[10px] text-slate-500 uppercase mt-4">Rotary Wing</p>
                     </div>
-                    <div onclick="selectFleetModel('Fixedwing')" class="model-card p-12 rounded-[2rem] group">
-                        <h3 class="font-orbitron text-2xl font-bold tracking-[0.4em] uppercase">FIXEDWING</h3>
-                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-3">Fixed Wing Fleet</p>
+                    <div onclick="selectFleetModel('Fixedwing')" class="model-card p-16 rounded-3xl text-center">
+                        <h3 class="font-orbitron text-3xl font-bold tracking-widest">FIXEDWING</h3>
+                        <p class="text-[10px] text-slate-500 uppercase mt-4">Fixed Wing</p>
                     </div>
                 </div>
 
                 <div id="selection-type" class="hide max-w-md mx-auto space-y-6">
-                    <button onclick="resetFleetModel()" class="text-[10px] font-bold text-slate-500 hover:text-sky-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3"/></svg> BACK TO SELECTION
-                    </button>
-                    <div class="relative">
-                        <select id="library-type-dropdown" onchange="selectFleetType(this.value)" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-8 py-5 text-sm font-bold tracking-widest uppercase outline-none focus:border-sky-500 appearance-none cursor-pointer">
-                        </select>
-                        <div class="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3"/></svg>
-                        </div>
-                    </div>
+                    <button onclick="resetFleetModel()" class="text-[10px] font-bold text-slate-500 hover:text-sky-400 uppercase tracking-widest flex items-center gap-2">← Back</button>
+                    <select id="library-type-dropdown" onchange="selectFleetType(this.value)" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold appearance-none outline-none focus:border-sky-500"></select>
                 </div>
 
-                <div id="checklist-results" class="hide space-y-12">
-                    <section>
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="h-px flex-1 bg-gradient-to-r from-red-500/30 to-transparent"></div>
-                            <h2 class="font-orbitron text-red-500 text-[11px] font-bold tracking-[0.3em] uppercase text-center">Emergency Checklist</h2>
-                            <div class="h-px flex-1 bg-gradient-to-l from-red-500/30 to-transparent"></div>
-                        </div>
-                        <div id="emergency-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
-                    </section>
-                    <section>
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="h-px flex-1 bg-gradient-to-r from-sky-500/30 to-transparent"></div>
-                            <h2 class="font-orbitron text-sky-500 text-[11px] font-bold tracking-[0.3em] uppercase text-center">Normal Checklist</h2>
-                            <div class="h-px flex-1 bg-gradient-to-l from-sky-500/30 to-transparent"></div>
-                        </div>
-                        <div id="normal-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
-                    </section>
+                <div id="checklist-results" class="hide space-y-10">
+                    <div id="res-emergency">
+                        <h2 class="font-orbitron text-red-500 text-xs font-bold mb-6 uppercase tracking-widest">Emergency Protocols</h2>
+                        <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+                    </div>
+                    <div id="res-normal">
+                        <h2 class="font-orbitron text-sky-500 text-xs font-bold mb-6 uppercase tracking-widest">Normal Checklist</h2>
+                        <div id="normal-tabs" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- DATABANK -->
             <div id="page-documents" class="hide space-y-6">
-                <div class="flex justify-between items-center bg-slate-900/40 p-6 rounded-2xl border border-white/5">
-                    <div>
-                        <h2 class="text-xl font-bold font-orbitron tracking-tight uppercase">Registry Databank</h2>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Management of flight protocols</p>
-                    </div>
-                    <button onclick="switchPage('add')" class="bg-sky-600 hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-sky-900/20">Add Record</button>
-                </div>
-                <div class="glass-panel rounded-2xl overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-white/5">
+                <h2 class="font-orbitron text-xl font-bold uppercase">Registry Databank</h2>
+                <div class="glass rounded-2xl overflow-hidden overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-white/5 text-[10px] uppercase font-bold text-slate-500 tracking-widest">
                             <tr>
-                                <th class="p-4">Fleet Reference</th>
-                                <th class="p-4">Section</th>
+                                <th class="p-4">Reference</th>
                                 <th class="p-4">Title</th>
                                 <th class="p-4 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="document-table-body" class="text-sm"></tbody>
+                        <tbody id="document-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- INITIALIZE -->
             <div id="page-add" class="hide max-w-3xl mx-auto">
-                <div class="glass-panel rounded-3xl p-8 space-y-8">
-                    <div class="text-center border-b border-white/5 pb-8">
-                        <h2 id="form-title-heading" class="text-2xl font-bold font-orbitron tracking-widest uppercase">Initialize Protocol</h2>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-2">Sync parameters to cloud core</p>
-                    </div>
-                    <form id="protocol-form" class="space-y-6">
+                <div class="glass rounded-3xl p-8 space-y-6">
+                    <h2 id="form-heading" class="font-orbitron text-2xl font-bold text-center">INITIALIZE PROTOCOL</h2>
+                    <form id="protocol-form" class="space-y-4">
                         <input type="hidden" id="form-id">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Aircraft Model</label>
-                                <select id="form-aircraft-model" required onchange="updateFormTypeOptions(this.value)" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
-                                    <option value="" disabled selected>Select Model</option>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase">Fleet Model</label>
+                                <select id="form-aircraft-model" required onchange="updateFormTypeOptions(this.value)" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-sky-500">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="Helicopter">Helicopter</option>
                                     <option value="Fixedwing">Fixedwing</option>
                                 </select>
                             </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Aircraft Type</label>
-                                <div class="relative">
-                                    <select id="form-aircraft-type-select" onchange="checkManualType(this.value)" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
-                                        <option value="" disabled selected>Select Type</option>
-                                    </select>
-                                    <input type="text" id="form-aircraft-type-manual" placeholder="Custom type name..." class="hide w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 mt-2">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Section</label>
-                                <input type="text" id="form-section" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Mode</label>
-                                <select id="form-type" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
-                                    <option value="Normal">NORMAL OPS</option>
-                                    <option value="Emergency">EMERGENCY OPS</option>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase">Fleet Type</label>
+                                <select id="form-aircraft-type-select" onchange="checkManualType(this.value)" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-sky-500">
+                                    <option value="" disabled selected>Select</option>
                                 </select>
+                                <input type="text" id="form-aircraft-type-manual" placeholder="Input manual type" class="hide w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 mt-2 outline-none focus:border-sky-500">
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Procedure Title</label>
-                            <input type="text" id="form-title" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="form-section" placeholder="Section" required class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3">
+                            <select id="form-type" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3">
+                                <option value="Normal">Normal</option>
+                                <option value="Emergency">Emergency</option>
+                            </select>
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Checklist Content</label>
-                            <textarea id="form-content" rows="5" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm font-mono outline-none focus:border-sky-500"></textarea>
+                        <input type="text" id="form-title" placeholder="Procedure Title" required class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3">
+                        <textarea id="form-content" rows="6" placeholder="☐ Checklist Content" class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 font-mono text-sm"></textarea>
+                        <input type="file" id="form-file" class="hidden">
+                        <div onclick="document.getElementById('form-file').click()" class="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center cursor-pointer hover:border-sky-500 transition-colors">
+                            <p id="file-info" class="text-xs text-slate-500 uppercase font-bold">Attach Media (PDF/IMG)</p>
                         </div>
-                        <div id="drop-area" class="border-2 border-dashed border-white/5 rounded-2xl p-6 text-center bg-white/[0.01] hover:border-sky-500/30 cursor-pointer group transition-all">
-                            <input type="file" id="form-file" class="hidden">
-                            <div id="file-info" class="text-slate-500 flex flex-col items-center">
-                                <p class="text-[9px] font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100">Attach Media (PDF/IMG)</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 pt-4">
-                            <button type="submit" id="submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-sky-900/30">Commit to Cloud</button>
-                            <button type="button" onclick="switchPage('documents')" id="cancel-btn" class="hide px-8 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
-                        </div>
+                        <button type="submit" id="submit-btn" class="w-full bg-sky-600 hover:bg-sky-500 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-sky-900/20">Commit to Cloud</button>
                     </form>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- MODALS -->
     <div id="preview-modal" class="fixed inset-0 z-[200] hide flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closePreview()"></div>
-        <div class="relative w-full max-w-5xl h-[85vh] glass-panel rounded-[2rem] overflow-hidden flex flex-col border border-white/10 shadow-2xl">
+        <div class="relative w-full max-w-5xl h-[85vh] glass rounded-3xl overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-white/5 bg-black/20">
                 <div id="preview-meta"></div>
-                <div class="flex items-center gap-3">
-                    <button onclick="downloadCurrentFile()" class="p-2.5 bg-sky-500/10 hover:bg-sky-500/20 rounded-full text-sky-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
-                    <button onclick="closePreview()" class="p-2.5 hover:bg-white/10 rounded-full text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
-                </div>
+                <button onclick="closePreview()" class="p-2 hover:bg-white/10 rounded-full">✕</button>
             </div>
-            <div id="preview-content" class="flex-1 overflow-auto p-8 md:p-12"></div>
+            <div id="preview-content" class="flex-1 overflow-auto p-8"></div>
         </div>
     </div>
-
-    <div id="delete-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-        <div class="relative w-full max-w-sm glass-panel rounded-3xl p-10 text-center border border-red-500/20">
-            <h3 class="font-orbitron text-lg font-bold mb-3 uppercase text-red-500 tracking-widest">Purge Data?</h3>
-            <div class="flex gap-4 mt-8">
-                <button onclick="confirmDelete()" id="del-confirm-btn" class="flex-1 bg-red-600 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest">Delete</button>
-                <button onclick="closeDeleteModal()" class="flex-1 bg-white/5 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/5">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="config-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="toggleConfig()"></div>
-        <div class="relative w-full max-w-md glass-panel rounded-3xl p-10">
-            <h3 class="font-orbitron text-center text-lg font-bold mb-8 uppercase tracking-widest">System Link</h3>
-            <input type="text" id="config-url-input" class="w-full bg-slate-950 border border-white/10 rounded-2xl px-5 py-4 text-xs font-mono outline-none focus:border-sky-500 text-sky-400 mb-6">
-            <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-[10px] uppercase">Establish Connection</button>
-        </div>
-    </div>
-
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[1000] flex flex-col gap-3"></div>
 
     <script>
-        const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbx4Q4vkJudnI-oDr7it3E0T_MC7iS4TXBPYutKXi_CaeBn52ry8iebysW6xFH366rua/exec";
-        let scriptUrl = localStorage.getItem('skyops_url') || DEFAULT_URL;
-        let appData = [];
-        let deleteId = null, activeItem = null, selectedModel = null, selectedType = null;
-
-        const HELI_TYPES = ["Bell 412 EP", "AW109"];
-        const FW_TYPES = ["Gulfstream IV", "Beechcraft King Air 300", "NC 212-200"];
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbxlD9qnYOxYhXRXXGOH8pQ1W06mFTorKcbGtjsuLvZWPmtAuyCKX3ZoeLUGa1tRbHw/exec";
+        let appData = [], selectedModel = null, selectedType = null, selectedFileBase64 = null, selectedFileName = "", selectedFileType = "";
 
         window.onload = () => {
-            document.getElementById('config-url-input').value = scriptUrl;
-            runBootAnimation();
-            fetchData();
+            gsap.to("#boot-bar", { width: "100%", duration: 2, ease: "power2.inOut", onComplete: () => {
+                gsap.to("#opening-screen", { opacity: 0, duration: 1, onComplete: () => {
+                    document.getElementById('opening-screen').classList.add('hide');
+                    document.getElementById('app').style.opacity = "1";
+                    fetchData();
+                }});
+            }});
         };
 
-        function runBootAnimation() {
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    gsap.to("#opening-screen", { opacity: 0, duration: 1, onComplete: () => {
-                        document.getElementById('opening-screen').classList.add('hide');
-                        gsap.to("#app", { opacity: 1, duration: 1 });
-                    }});
-                }
-            });
-            tl.to("#logo-container", { opacity: 1, scale: 1, duration: 1.5 }).to("#brand-title", { opacity: 1, y: 0, duration: 1 }, "-=1").to("#boot-loader", { opacity: 1, duration: 0.5 }, "-=0.5").to("#boot-progress", { width: "100%", duration: 2 });
-        }
-
         async function fetchData() {
-            if (!scriptUrl) return;
-            showToast("Syncing mission databank...", "info");
             try {
-                const response = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
-                const result = await response.json();
-                appData = result.data || [];
+                const res = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
+                const json = await res.json();
+                appData = json.data || [];
                 renderDocuments();
-                if (selectedModel && selectedType) renderLibraryChecklists();
-                showToast(`System Synced: ${appData.length} records ready`, "success");
-            } catch (error) { showToast("Databank link failure", "error"); }
-        }
-
-        function selectFleetModel(model) {
-            selectedModel = model;
-            const dropdown = document.getElementById('library-type-dropdown');
-            dropdown.innerHTML = `<option value="" disabled selected>SELECT ${model.toUpperCase()} TYPE</option>`;
-            const fromData = [...new Set(appData.filter(item => item.aircraftModel === model).map(item => item.aircraftType))];
-            const defaults = model === 'Helicopter' ? HELI_TYPES : FW_TYPES;
-            const combined = [...new Set([...defaults, ...fromData])].filter(t => t && t !== "undefined");
-
-            combined.forEach(type => {
-                const opt = document.createElement('option');
-                opt.value = type; opt.innerText = type.toUpperCase();
-                dropdown.appendChild(opt);
-            });
-
-            gsap.to("#selection-model", { opacity: 0, y: -20, duration: 0.3, onComplete: () => {
-                document.getElementById('selection-model').classList.add('hide');
-                document.getElementById('selection-type').classList.remove('hide');
-                gsap.fromTo("#selection-type", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-            }});
-        }
-
-        function resetFleetModel() {
-            selectedModel = null; selectedType = null;
-            document.getElementById('checklist-results').classList.add('hide');
-            document.getElementById('selection-type').classList.add('hide');
-            document.getElementById('selection-model').classList.remove('hide');
-            gsap.fromTo("#selection-model", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
-        }
-
-        function selectFleetType(type) {
-            selectedType = type;
-            renderLibraryChecklists();
-            document.getElementById('checklist-results').classList.remove('hide');
-            gsap.fromTo("#checklist-results", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-        }
-
-        function renderLibraryChecklists() {
-            const normalContainer = document.getElementById('normal-tabs');
-            const emergencyContainer = document.getElementById('emergency-tabs');
-            normalContainer.innerHTML = ""; emergencyContainer.innerHTML = "";
-            const filtered = appData.filter(item => item.aircraftModel === selectedModel && item.aircraftType === selectedType);
-            filtered.forEach(item => {
-                const type = String(item.type).toLowerCase();
-                const btn = document.createElement('button');
-                btn.className = `tab-btn ${type} group`;
-                btn.onclick = () => openPreview(item);
-                btn.innerHTML = `<div class="flex justify-between items-start w-full"><span class="text-[8px] font-black opacity-30 group-hover:opacity-100 uppercase ${type === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span><svg class="w-3 h-3 opacity-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3"/></svg></div><h4 class="text-[10px] font-bold leading-tight uppercase text-slate-300 group-hover:text-white line-clamp-2">${item.title}</h4>`;
-                if (type === 'emergency') emergencyContainer.appendChild(btn);
-                else normalContainer.appendChild(btn);
-            });
+            } catch (e) { showToast("Connection error", "error"); }
         }
 
         function renderDocuments() {
             const tbody = document.getElementById('document-table-body');
-            tbody.innerHTML = "";
-            appData.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-white/[0.02] hover:bg-white/[0.01] transition-colors";
-                const fleetRef = (item.aircraftModel && item.aircraftType) ? `${item.aircraftModel} / ${item.aircraftType}` : "Incomplete Reference";
-                tr.innerHTML = `<td class="p-4"><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">${fleetRef}</div></td><td class="p-4 text-[10px] font-bold text-sky-500 uppercase">${item.section}</td><td class="p-4 font-bold text-slate-200 uppercase text-xs">${item.title}</td><td class="p-4 text-right"><div class="flex justify-end gap-2"><button onclick="editItem('${item.id}')" class="p-2 text-slate-500 hover:text-sky-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button onclick="triggerDelete('${item.id}')" class="p-2 text-slate-500 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateFormTypeOptions(model) {
-            const select = document.getElementById('form-aircraft-type-select');
-            const manualInput = document.getElementById('form-aircraft-type-manual');
-            select.innerHTML = '<option value="" disabled selected>Select Type</option>';
-            manualInput.classList.add('hide');
-            const types = model === 'Helicopter' ? HELI_TYPES : FW_TYPES;
-            types.forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t; opt.innerText = t;
-                select.appendChild(opt);
-            });
-            const optManual = document.createElement('option');
-            optManual.value = "MANUAL"; optManual.innerText = "+ Add Manual Type";
-            select.appendChild(optManual);
-        }
-
-        function checkManualType(val) {
-            const input = document.getElementById('form-aircraft-type-manual');
-            if(val === 'MANUAL') input.classList.remove('hide');
-            else input.classList.add('hide');
+            tbody.innerHTML = appData.map(item => `
+                <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                    <td class="p-4"><div class="text-[9px] font-bold text-sky-500 uppercase">${item.aircraftModel} / ${item.aircraftType}</div></td>
+                    <td class="p-4 font-semibold uppercase text-xs">${item.title}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="editItem('${item.id}')" class="text-sky-400 mr-4">Edit</button>
+                        <button onclick="deleteItem('${item.id}')" class="text-red-500">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         function switchPage(page) {
             ['library', 'documents', 'add'].forEach(p => {
                 document.getElementById(`page-${p}`).classList.add('hide');
-                document.getElementById(`nav-${p}`).classList.remove('active', 'text-white');
-                document.getElementById(`nav-${p}`).classList.add('text-slate-500');
+                document.getElementById(`nav-${p}`).classList.remove('active');
             });
             document.getElementById(`page-${page}`).classList.remove('hide');
-            document.getElementById(`nav-${page}`).classList.add('active', 'text-white');
-            document.getElementById(`nav-${page}`).classList.remove('text-slate-500');
+            document.getElementById(`nav-${page}`).classList.add('active');
             if(page === 'library') resetFleetModel();
-            if (page === 'add') {
-                document.getElementById('protocol-form').reset();
-                document.getElementById('form-id').value = "";
-                document.getElementById('form-title-heading').innerText = "Initialize Protocol";
-                document.getElementById('cancel-btn').classList.add('hide');
-            }
+        }
+
+        function selectFleetModel(model) {
+            selectedModel = model;
+            const dropdown = document.getElementById('library-type-dropdown');
+            const types = [...new Set(appData.filter(i => i.aircraftModel === model).map(i => i.aircraftType))];
+            dropdown.innerHTML = `<option value="" disabled selected>SELECT TYPE</option>` + types.map(t => `<option value="${t}">${t.toUpperCase()}</option>`).join('');
+            document.getElementById('selection-model').classList.add('hide');
+            document.getElementById('selection-type').classList.remove('hide');
+        }
+
+        function resetFleetModel() {
+            document.getElementById('selection-model').classList.remove('hide');
+            document.getElementById('selection-type').classList.add('hide');
+            document.getElementById('checklist-results').classList.add('hide');
+        }
+
+        function selectFleetType(type) {
+            selectedType = type;
+            const filtered = appData.filter(i => i.aircraftModel === selectedModel && i.aircraftType === type);
+            const renderTabs = (items, containerId) => {
+                document.getElementById(containerId).innerHTML = items.map(item => `
+                    <button onclick='openPreview(${JSON.stringify(item)})' class="tab-btn ${item.type.toLowerCase()} relative p-4 rounded-xl text-left h-20 flex flex-col justify-end group">
+                        <span class="text-[8px] font-bold opacity-30 uppercase">${item.section}</span>
+                        <h4 class="text-[10px] font-bold leading-tight uppercase group-hover:text-white">${item.title}</h4>
+                    </button>
+                `).join('') || `<p class="text-[9px] text-slate-600 col-span-full">No procedures</p>`;
+            };
+            renderTabs(filtered.filter(i => i.type === 'Emergency'), 'emergency-tabs');
+            renderTabs(filtered.filter(i => i.type === 'Normal'), 'normal-tabs');
+            document.getElementById('checklist-results').classList.remove('hide');
+        }
+
+        function updateFormTypeOptions(model) {
+            const select = document.getElementById('form-aircraft-type-select');
+            const list = model === 'Helicopter' ? ["Bell 412 EP", "AW109"] : ["Gulfstream IV", "Beechcraft King Air 300", "NC 212-200"];
+            select.innerHTML = '<option value="" disabled selected>Select</option>' + list.map(t => `<option value="${t}">${t}</option>`).join('') + '<option value="MANUAL">+ Add Manual</option>';
+        }
+
+        function checkManualType(val) {
+            document.getElementById('form-aircraft-type-manual').classList.toggle('hide', val !== 'MANUAL');
         }
 
         function editItem(id) {
             const item = appData.find(i => i.id === id);
-            if (!item) return;
+            if(!item) return;
             switchPage('add');
-            document.getElementById('form-title-heading').innerText = "Modify Protocol";
             document.getElementById('form-id').value = item.id;
             document.getElementById('form-aircraft-model').value = item.aircraftModel;
             updateFormTypeOptions(item.aircraftModel);
+            
             const typeSelect = document.getElementById('form-aircraft-type-select');
-            if (HELI_TYPES.includes(item.aircraftType) || FW_TYPES.includes(item.aircraftType)) {
+            const standardTypes = ["Bell 412 EP", "AW109", "Gulfstream IV", "Beechcraft King Air 300", "NC 212-200"];
+            
+            if (standardTypes.includes(item.aircraftType)) {
                 typeSelect.value = item.aircraftType;
+                document.getElementById('form-aircraft-type-manual').classList.add('hide');
             } else {
                 typeSelect.value = "MANUAL";
-                const man = document.getElementById('form-aircraft-type-manual');
-                man.classList.remove('hide');
-                man.value = item.aircraftType;
+                const manualInput = document.getElementById('form-aircraft-type-manual');
+                manualInput.classList.remove('hide');
+                manualInput.value = item.aircraftType;
             }
+            
             document.getElementById('form-section').value = item.section;
             document.getElementById('form-type').value = item.type;
             document.getElementById('form-title').value = item.title;
-            document.getElementById('form-content').value = item.content || "";
-            document.getElementById('cancel-btn').classList.remove('hide');
+            document.getElementById('form-content').value = item.content;
+            document.getElementById('form-heading').innerText = "MODIFY PROTOCOL";
         }
 
         document.getElementById('protocol-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            btn.disabled = true; btn.innerHTML = "SYNCING...";
-            const typeVal = document.getElementById('form-aircraft-type-select').value;
-            const finalType = typeVal === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeVal;
+            btn.disabled = true; btn.innerText = "Syncing...";
             
+            const typeSelect = document.getElementById('form-aircraft-type-select').value;
+            const finalType = typeSelect === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeSelect;
+
             const payload = {
                 action: document.getElementById('form-id').value ? 'update' : 'create',
                 id: document.getElementById('form-id').value,
@@ -505,84 +273,52 @@
                 content: document.getElementById('form-content').value,
                 fileName: selectedFileName, fileMime: selectedFileType, fileData: selectedFileBase64
             };
+
             try {
                 const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await res.json();
-                if (result.status === "success") { showToast("System Synchronized", "success"); switchPage('documents'); fetchData(); }
-                else throw new Error(result.message);
-            } catch (err) { showToast("Sync Failure: " + err.message, "error"); }
+                if(result.status === 'success') {
+                    showToast("System Synced", "success");
+                    switchPage('documents');
+                    fetchData();
+                } else { showToast("Save failed: " + result.message, "error"); }
+            } catch (e) { showToast("Sync Failure", "error"); }
             finally { btn.disabled = false; btn.innerText = "Commit to Cloud"; }
         };
 
         function openPreview(item) {
-            activeItem = item;
-            const meta = document.getElementById('preview-meta');
-            meta.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.4em] font-bold mb-1">${item.aircraftModel} / ${item.aircraftType}</p><h3 class="font-bold text-lg md:text-xl font-orbitron text-white uppercase">${item.title}</h3>`;
+            document.getElementById('preview-meta').innerHTML = `<p class="text-[9px] text-sky-500 font-bold uppercase">${item.aircraftModel} / ${item.aircraftType}</p><h3 class="font-orbitron font-bold uppercase">${item.title}</h3>`;
+            const content = item.content ? item.content.split('\n').map(l => {
+                if(l.includes('☐')) return `<div class="p-3 border-b border-white/5 uppercase font-bold text-xs flex gap-4" onclick="this.style.opacity=0.3"><div class="w-4 h-4 border border-slate-700"></div>${l.replace('☐','')}</div>`;
+                if(l.includes('⚠')) return `<div class="p-4 bg-orange-500/5 text-orange-500 italic text-xs my-2 border-l-4 border-orange-500">${l}</div>`;
+                return `<p class="text-slate-500 text-[10px] p-2 uppercase">${l}</p>`;
+            }).join('') : (item.fileUrl ? (item.fileType.includes('pdf') ? `<iframe src="${item.fileUrl}" class="w-full h-full border-none min-h-[500px]"></iframe>` : `<img src="${item.fileUrl}" class="max-w-full mx-auto">`) : 'No Data');
+            document.getElementById('preview-content').innerHTML = content;
             document.getElementById('preview-modal').classList.remove('hide');
-            const container = document.getElementById('preview-content');
-            if (item.content) {
-                const lines = item.content.split('\n');
-                let html = '<div class="space-y-4 font-mono text-sm">';
-                lines.forEach(line => {
-                    const t = line.trim(); if (!t) return;
-                    if (t.includes('☐')) html += `<div class="check-item flex items-start gap-4 p-3 rounded-xl cursor-pointer group" onclick="this.classList.toggle('completed')"><div class="mt-1 indicator"></div><div class="flex-1 uppercase font-bold text-slate-100">${t.replace('☐','')}</div></div>`;
-                    else if (t.includes('⚠')) html += `<div class="caution-alert p-5 rounded-2xl italic uppercase text-xs">${t}</div>`;
-                    else html += `<p class="text-slate-500 text-[10px] uppercase px-2">${t}</p>`;
-                });
-                container.innerHTML = html + '</div>';
-            } else if (item.fileUrl) {
-                container.innerHTML = item.fileType?.includes('pdf') ? `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>` : `<img src="${item.fileUrl}" class="max-w-full max-h-full mx-auto rounded-xl">`;
-            }
         }
 
-        function downloadCurrentFile() {
-            if (!activeItem) return;
-            if (activeItem.content) {
-                const element = document.createElement('a');
-                element.href = URL.createObjectURL(new Blob([activeItem.content], {type: 'text/plain'}));
-                element.download = `SkyOps_${activeItem.title.replace(/\s+/g, '_')}.txt`;
-                element.click();
-            } else if (activeItem.fileUrl) window.open(activeItem.fileUrl.replace('/preview', '/view').replace('/view', '/uc?export=download'), '_blank');
-        }
+        function closePreview() { document.getElementById('preview-modal').classList.add('hide'); }
 
-        function triggerDelete(id) { deleteId = id; document.getElementById('delete-modal').classList.remove('hide'); }
-        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hide'); }
-        async function confirmDelete() {
-            if (!deleteId) return;
-            const btn = document.getElementById('del-confirm-btn');
-            btn.disabled = true; btn.innerText = "ERASING...";
-            try {
-                await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: deleteId }) });
-                showToast("Record Purged", "success"); fetchData();
-            } catch (e) { showToast("Purge failed", "error"); }
-            finally { btn.disabled = false; btn.innerText = "Delete"; closeDeleteModal(); }
-        }
-
-        function closePreview() { document.getElementById('preview-modal').classList.add('hide'); activeItem = null; }
-        function toggleConfig() { document.getElementById('config-modal').classList.toggle('hide'); }
-        function saveConfig() { localStorage.setItem('skyops_url', document.getElementById('config-url-input').value.trim()); location.reload(); }
-
-        let selectedFileBase64 = null, selectedFileName = "", selectedFileType = "";
-        document.getElementById('drop-area').onclick = () => document.getElementById('form-file').click();
         document.getElementById('form-file').onchange = (e) => {
             const file = e.target.files[0];
-            if (file) {
-                selectedFileName = file.name; selectedFileType = file.type;
-                document.getElementById('file-info').innerHTML = `<p class="text-sky-400 font-bold text-[10px] uppercase">${file.name}</p>`;
-                const reader = new FileReader();
-                reader.onload = (ev) => { selectedFileBase64 = ev.target.result.split(',')[1]; };
-                reader.readAsDataURL(file);
-            }
+            if(!file) return;
+            selectedFileName = file.name; selectedFileType = file.type;
+            const reader = new FileReader();
+            reader.onload = (ev) => { selectedFileBase64 = ev.target.result.split(',')[1]; document.getElementById('file-info').innerText = file.name; };
+            reader.readAsDataURL(file);
         };
 
         function showToast(m, t) {
             const toast = document.createElement('div');
-            const c = { success: 'border-green-500 text-green-500', error: 'border-red-500 text-red-500', info: 'border-sky-500 text-sky-500' };
-            toast.className = `px-6 py-4 rounded-2xl glass-panel ${c[t]} font-bold text-[9px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase border shadow-2xl z-[1000]`;
-            toast.innerText = m;
-            document.getElementById('toast-container').appendChild(toast);
-            setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 100);
-            setTimeout(() => { toast.classList.add('translate-x-20', 'opacity-0'); setTimeout(() => toast.remove(), 400); }, 3000);
+            toast.className = `fixed bottom-6 right-6 p-4 rounded-2xl glass font-bold text-[10px] uppercase border tracking-widest ${t==='success'?'text-green-500':'text-red-500'}`;
+            toast.innerText = m; document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function deleteItem(id) {
+            if(!confirm("Purge record?")) return;
+            await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: id }) });
+            fetchData();
         }
     </script>
 </body>
