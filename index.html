@@ -52,15 +52,10 @@
             position: absolute; top: 0; opacity: 0.3;
             animation: scan 4s linear infinite;
         }
-
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
         /* Navigation */
-        .nav-link {
-            position: relative;
-            transition: all 0.3s ease;
-            letter-spacing: 0.1em;
-        }
+        .nav-link { position: relative; transition: all 0.3s ease; letter-spacing: 0.1em; }
         .nav-link.active { color: var(--primary); }
         .nav-link.active::after {
             content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px;
@@ -78,45 +73,32 @@
             display: flex; flex-direction: column; justify-content: space-between;
             padding: 1rem; border-radius: 12px;
         }
+        .tab-btn:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); }
+        .tab-btn.emergency::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--emergency); box-shadow: 0 0 10px var(--emergency); border-radius: 0 4px 4px 0; }
+        .tab-btn.normal::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px; background: var(--primary); box-shadow: 0 0 10px var(--primary); border-radius: 0 4px 4px 0; }
 
-        .tab-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
+        /* Model Cards */
+        .model-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(2, 6, 23, 0.8) 100%);
+            border: 1px solid var(--border);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
         }
-
-        .tab-btn.emergency::before {
-            content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px;
-            background: var(--emergency); box-shadow: 0 0 10px var(--emergency);
-            border-radius: 0 4px 4px 0;
-        }
-
-        .tab-btn.normal::before {
-            content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 3px;
-            background: var(--primary); box-shadow: 0 0 10px var(--primary);
-            border-radius: 0 4px 4px 0;
-        }
+        .model-card:hover { border-color: var(--primary); transform: scale(1.02); box-shadow: 0 0 30px rgba(14, 165, 233, 0.1); }
+        .model-card.active { border-color: var(--primary); background: rgba(14, 165, 233, 0.1); }
 
         /* Checklist Formatting */
-        .check-item {
-            transition: all 0.2s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
+        .check-item { transition: all 0.2s ease; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
         .check-item:hover { background: rgba(255, 255, 255, 0.02); }
         .check-item.completed { opacity: 0.3; }
         .check-item.completed .indicator { background: #22c55e; border-color: #22c55e; }
+        .caution-alert { background: rgba(245, 158, 11, 0.05); border-left: 4px solid #f59e0b; color: #f59e0b; }
 
-        .caution-alert {
-            background: rgba(245, 158, 11, 0.05);
-            border-left: 4px solid #f59e0b;
-            color: #f59e0b;
-        }
-
-        /* Custom UI */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
         .hide { display: none !important; }
+
+        select option { background: #0f172a; color: white; }
     </style>
 </head>
 <body class="no-scrollbar">
@@ -129,7 +111,7 @@
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" alt="SkyOps Logo" class="w-full h-full object-contain filter drop-shadow-[0_0_20px_var(--primary-glow)]">
             </div>
             <div class="text-center">
-                <h1 id="brand-title" class="font-orbitron text-3xl font-bold tracking-[0.3em] text-white opacity-0 translate-y-4">SKYOPS</h1>
+                <h1 id="brand-title" class="font-orbitron text-3xl font-bold tracking-[0.3em] text-white opacity-0 translate-y-4 uppercase">SkyOps</h1>
                 <p id="brand-subtitle" class="text-[10px] font-medium tracking-[0.5em] text-slate-500 uppercase mt-2 opacity-0">Pilot Checklist System</p>
             </div>
             <div id="boot-loader" class="w-48 h-[1px] bg-slate-900 mt-12 overflow-hidden opacity-0">
@@ -138,53 +120,85 @@
         </div>
     </div>
 
-    <!-- Main Application Shell -->
+    <!-- Main App -->
     <div id="app" class="min-h-screen opacity-0 transition-opacity duration-1000">
-        <!-- Persistent Navigation -->
         <nav class="fixed top-0 inset-x-0 h-16 glass-panel z-50 flex items-center justify-between px-4 md:px-8">
             <div class="flex items-center gap-3">
                 <img src="https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF" class="h-8 w-8" alt="Logo">
-                <span class="font-orbitron font-bold text-lg tracking-tighter hidden sm:block">SKYOPS</span>
+                <span class="font-orbitron font-bold text-lg tracking-tighter hidden sm:block uppercase">SkyOps</span>
             </div>
-            
             <div class="flex items-center gap-6 md:gap-10 text-[10px] font-bold uppercase tracking-widest">
                 <button onclick="switchPage('library')" id="nav-library" class="nav-link active">Library</button>
                 <button onclick="switchPage('documents')" id="nav-documents" class="nav-link text-slate-500">Databank</button>
                 <button onclick="switchPage('add')" id="nav-add" class="nav-link text-slate-500">Initialize</button>
                 <div class="w-[1px] h-4 bg-slate-800 hidden md:block"></div>
                 <div class="flex items-center gap-4">
-                    <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 transition-colors" title="Sync System">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    </button>
-                    <button onclick="toggleConfig()" class="text-slate-500 hover:text-white transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
+                    <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+                    <button onclick="toggleConfig()" class="text-slate-500 hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
                 </div>
             </div>
         </nav>
 
         <main class="pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
             
+            <!-- LIBRARY PAGE -->
             <div id="page-library" class="space-y-12">
-                <section>
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="h-px flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
-                        <h2 class="font-orbitron text-red-500 text-sm font-bold tracking-[0.2em] uppercase">Emergency Checklist</h2>
-                        <div class="h-px flex-1 bg-gradient-to-l from-red-500/50 to-transparent"></div>
+                <!-- Step 1: Model Selection -->
+                <div id="selection-model" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div onclick="selectFleetModel('Helicopter')" class="model-card p-10 rounded-3xl text-center group">
+                        <div class="text-sky-500 mb-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1" d="M12 2v20M5 5l14 14M19 5L5 14"/></svg>
+                        </div>
+                        <h3 class="font-orbitron text-2xl font-bold tracking-widest">HELICOPTER</h3>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-2">Rotary Wing Fleet</p>
                     </div>
-                    <div id="emergency-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
-                </section>
+                    <div onclick="selectFleetModel('Fixedwing')" class="model-card p-10 rounded-3xl text-center group">
+                        <div class="text-sky-500 mb-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1" d="M3 12h18M3 10l18-4M3 14l18 4"/></svg>
+                        </div>
+                        <h3 class="font-orbitron text-2xl font-bold tracking-widest">FIXEDWING</h3>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mt-2">Fixed Wing Fleet</p>
+                    </div>
+                </div>
 
-                <section>
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="h-px flex-1 bg-gradient-to-r from-sky-500/50 to-transparent"></div>
-                        <h2 class="font-orbitron text-sky-500 text-sm font-bold tracking-[0.2em] uppercase">Normal Checklist</h2>
-                        <div class="h-px flex-1 bg-gradient-to-l from-sky-500/50 to-transparent"></div>
+                <!-- Step 2: Type Dropdown -->
+                <div id="selection-type" class="hide max-w-md mx-auto space-y-4">
+                    <button onclick="resetFleetModel()" class="text-[9px] font-bold text-slate-500 hover:text-white uppercase tracking-widest flex items-center gap-2">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg> Back to Fleet Selection
+                    </button>
+                    <div class="relative">
+                        <select id="library-type-dropdown" onchange="selectFleetType(this.value)" class="w-full bg-slate-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold tracking-widest uppercase outline-none focus:border-sky-500 transition-all appearance-none cursor-pointer">
+                            <!-- Options injected -->
+                        </select>
+                        <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3"/></svg>
+                        </div>
                     </div>
-                    <div id="normal-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
-                </section>
+                </div>
+
+                <!-- Step 3: Checklist Tabs -->
+                <div id="checklist-results" class="hide space-y-12">
+                    <section>
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="h-px flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
+                            <h2 class="font-orbitron text-red-500 text-sm font-bold tracking-[0.2em] uppercase">Emergency Checklist</h2>
+                            <div class="h-px flex-1 bg-gradient-to-l from-red-500/50 to-transparent"></div>
+                        </div>
+                        <div id="emergency-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
+                    </section>
+
+                    <section>
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="h-px flex-1 bg-gradient-to-r from-sky-500/50 to-transparent"></div>
+                            <h2 class="font-orbitron text-sky-500 text-sm font-bold tracking-[0.2em] uppercase">Normal Checklist</h2>
+                            <div class="h-px flex-1 bg-gradient-to-l from-sky-500/50 to-transparent"></div>
+                        </div>
+                        <div id="normal-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
+                    </section>
+                </div>
             </div>
 
+            <!-- DOCUMENTS PAGE -->
             <div id="page-documents" class="hide space-y-6">
                 <div class="flex justify-between items-center bg-slate-900/40 p-6 rounded-2xl border border-white/5">
                     <div>
@@ -193,14 +207,13 @@
                     </div>
                     <button onclick="switchPage('add')" class="bg-sky-600 hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Add Record</button>
                 </div>
-
                 <div class="glass-panel rounded-2xl overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="text-[10px] text-slate-500 uppercase tracking-widest border-b border-white/5">
                             <tr>
+                                <th class="p-4">Model / Type</th>
                                 <th class="p-4">Section</th>
                                 <th class="p-4">Title</th>
-                                <th class="p-4 hidden md:table-cell">Type</th>
                                 <th class="p-4 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -209,19 +222,41 @@
                 </div>
             </div>
 
+            <!-- INITIALIZE PAGE (Form) -->
             <div id="page-add" class="hide max-w-3xl mx-auto">
                 <div class="glass-panel rounded-3xl p-8 space-y-8">
                     <div class="text-center border-b border-white/5 pb-8">
                         <h2 id="form-title-heading" class="text-2xl font-bold font-orbitron tracking-widest uppercase">Initialize Protocol</h2>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-2">Create new system record</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] mt-2">Create new fleet record</p>
                     </div>
-
                     <form id="protocol-form" class="space-y-6">
                         <input type="hidden" id="form-id">
+                        
+                        <!-- FLEET SELECTION -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Aircraft Model</label>
+                                <select id="form-aircraft-model" required onchange="updateFormTypeOptions(this.value)" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Select Model</option>
+                                    <option value="Helicopter">Helicopter</option>
+                                    <option value="Fixedwing">Fixedwing</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Aircraft Type</label>
+                                <div class="relative">
+                                    <select id="form-aircraft-type-select" onchange="checkManualType(this.value)" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 appearance-none cursor-pointer">
+                                        <option value="" disabled selected>Select Type</option>
+                                    </select>
+                                    <input type="text" id="form-aircraft-type-manual" placeholder="Enter custom type..." class="hide w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 mt-2">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase px-1">System Section</label>
-                                <input type="text" id="form-section" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 transition-colors">
+                                <input type="text" id="form-section" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Protocol Mode</label>
@@ -234,24 +269,24 @@
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Procedure Title</label>
-                            <input type="text" id="form-title" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500 transition-colors">
+                            <input type="text" id="form-title" required class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-3.5 text-sm outline-none focus:border-sky-500">
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase px-1">Checklist Data</label>
-                            <textarea id="form-content" rows="6" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm font-mono outline-none focus:border-sky-500 transition-colors"></textarea>
+                            <textarea id="form-content" rows="5" class="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm font-mono outline-none focus:border-sky-500"></textarea>
                         </div>
 
-                        <div id="drop-area" class="border-2 border-dashed border-white/5 rounded-2xl p-8 text-center bg-white/[0.01] hover:border-sky-500/30 cursor-pointer group transition-all">
+                        <div id="drop-area" class="border-2 border-dashed border-white/5 rounded-2xl p-6 text-center bg-white/[0.01] hover:border-sky-500/30 cursor-pointer group transition-all">
                             <input type="file" id="form-file" class="hidden">
                             <div id="file-info" class="text-slate-500 flex flex-col items-center">
-                                <svg class="w-8 h-8 mb-3 opacity-20 group-hover:opacity-100 group-hover:text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
-                                <p class="text-[10px] font-bold uppercase tracking-widest">Attach Media Payload (PDF/IMG)</p>
+                                <svg class="w-6 h-6 mb-2 opacity-20 group-hover:opacity-100 group-hover:text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="1.5"/></svg>
+                                <p class="text-[9px] font-bold uppercase tracking-widest">Media Payload (PDF/IMG)</p>
                             </div>
                         </div>
 
                         <div class="flex gap-4 pt-4">
-                            <button type="submit" id="submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-sky-900/30 transition-all">Sync Databank</button>
+                            <button type="submit" id="submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-sky-900/30">Sync Databank</button>
                             <button type="button" onclick="switchPage('documents')" id="cancel-btn" class="hide px-8 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/5">Cancel</button>
                         </div>
                     </form>
@@ -260,16 +295,14 @@
         </main>
     </div>
 
-    <!-- PREVIEW MODAL -->
+    <!-- MODALS -->
     <div id="preview-modal" class="fixed inset-0 z-[200] hide flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closePreview()"></div>
-        <div class="relative w-full max-w-5xl h-[85vh] glass-panel rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-white/10">
+        <div class="relative w-full max-w-5xl h-[85vh] glass-panel rounded-3xl overflow-hidden flex flex-col border border-white/10">
             <div class="flex items-center justify-between p-6 border-b border-white/5 bg-black/20">
                 <div id="preview-meta"></div>
                 <div class="flex items-center gap-3">
-                    <button onclick="downloadCurrentFile()" class="p-2.5 bg-sky-500/10 hover:bg-sky-500/20 rounded-full text-sky-400 transition-all" title="Download Source">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    </button>
+                    <button onclick="downloadCurrentFile()" class="p-2.5 bg-sky-500/10 hover:bg-sky-500/20 rounded-full text-sky-400" title="Download Source"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
                     <button onclick="closePreview()" class="p-2.5 hover:bg-white/10 rounded-full text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
                 </div>
             </div>
@@ -277,41 +310,39 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL -->
     <div id="delete-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
         <div class="relative w-full max-w-sm glass-panel rounded-3xl p-8 text-center border border-red-500/20">
             <h3 class="font-orbitron text-lg font-bold mb-2 uppercase">Erase Protocol?</h3>
-            <p class="text-slate-400 text-xs uppercase tracking-widest mb-8">This action will permanently remove the record from the databank.</p>
-            <div class="flex gap-4">
+            <div class="flex gap-4 mt-8">
                 <button onclick="confirmDelete()" id="del-confirm-btn" class="flex-1 bg-red-600 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest">Delete</button>
                 <button onclick="closeDeleteModal()" class="flex-1 bg-white/5 py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/5">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- CONFIG MODAL -->
     <div id="config-modal" class="fixed inset-0 z-[300] hide flex items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="toggleConfig()"></div>
         <div class="relative w-full max-w-md glass-panel rounded-3xl p-10">
-            <h3 class="font-orbitron text-center text-lg font-bold mb-8 tracking-widest uppercase">System Link</h3>
-            <div class="space-y-6">
-                <input type="text" id="config-url-input" placeholder="Paste Apps Script URL" class="w-full bg-slate-950 border border-white/10 rounded-2xl px-5 py-4 text-xs font-mono outline-none focus:border-sky-500 text-sky-400">
-                <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em]">Establish Connection</button>
-            </div>
+            <h3 class="font-orbitron text-center text-lg font-bold mb-8 uppercase tracking-widest">System Link</h3>
+            <input type="text" id="config-url-input" class="w-full bg-slate-950 border border-white/10 rounded-2xl px-5 py-4 text-xs font-mono outline-none focus:border-sky-500 text-sky-400 mb-6">
+            <button onclick="saveConfig()" class="w-full bg-sky-600 py-4 rounded-2xl font-bold text-[10px] uppercase">Establish Connection</button>
         </div>
     </div>
 
     <div id="toast-container" class="fixed bottom-6 right-6 z-[1000] flex flex-col gap-3"></div>
 
     <script>
-        // SYSTEM CONFIGURATION
         const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbzGe7vtAezRXJaHtpK-8uD48zvTCaR5-8aRWe_CbueFn9eaTGJWhgTiqrjR7PO0_9Ew/exec";
         let scriptUrl = localStorage.getItem('skyops_url') || DEFAULT_URL;
-        
         let appData = [];
         let deleteId = null;
         let activeItem = null;
+        let selectedModel = null;
+        let selectedType = null;
+
+        const HELI_TYPES = ["Bell 412 EP", "AW109"];
+        const FW_TYPES = ["Gulfstream IV", "Beechcraft King Air 300", "NC 212-200"];
 
         window.onload = () => {
             document.getElementById('config-url-input').value = scriptUrl;
@@ -322,59 +353,98 @@
         function runBootAnimation() {
             const tl = gsap.timeline({
                 onComplete: () => {
-                    gsap.to("#opening-screen", { opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
+                    gsap.to("#opening-screen", { opacity: 0, duration: 1, onComplete: () => {
                         document.getElementById('opening-screen').classList.add('hide');
                         gsap.to("#app", { opacity: 1, duration: 1 });
                     }});
                 }
             });
-            tl.to("#logo-container", { opacity: 1, scale: 1, duration: 1.5, ease: "expo.out" })
+            tl.to("#logo-container", { opacity: 1, scale: 1, duration: 1.5 })
               .to("#brand-title", { opacity: 1, y: 0, duration: 1 }, "-=1")
               .to("#brand-subtitle", { opacity: 1, duration: 1 }, "-=0.8")
               .to("#boot-loader", { opacity: 1, duration: 0.5 }, "-=0.5")
-              .to("#boot-progress", { width: "100%", duration: 2.5, ease: "power3.inOut" });
+              .to("#boot-progress", { width: "100%", duration: 2 });
         }
 
         async function fetchData() {
             if (!scriptUrl) return;
-            showToast("Syncing with Databank...", "info");
+            showToast("Syncing mission databank...", "info");
             try {
                 const response = await fetch(`${scriptUrl}?action=read&t=${Date.now()}`);
                 const result = await response.json();
                 appData = result.data || [];
-                renderUI();
+                renderDocuments();
                 showToast(`System Synced: ${appData.length} records ready`, "success");
-            } catch (error) {
-                showToast("Databank Link failure", "error");
-            }
+            } catch (error) { showToast("Databank Link failure", "error"); }
         }
 
-        function renderUI() {
-            renderLibrary();
-            renderDocuments();
+        // FLEET SELECTION LOGIC (LIBRARY)
+        function selectFleetModel(model) {
+            selectedModel = model;
+            const dropdown = document.getElementById('library-type-dropdown');
+            dropdown.innerHTML = `<option value="" disabled selected>Select ${model} Type</option>`;
+            
+            // Get unique types from data for this model
+            const availableTypes = [...new Set(appData
+                .filter(item => item.aircraftModel === model)
+                .map(item => item.aircraftType))];
+            
+            // Add default list + any custom ones found in DB
+            const defaults = model === 'Helicopter' ? HELI_TYPES : FW_TYPES;
+            const combinedTypes = [...new Set([...defaults, ...availableTypes])];
+
+            combinedTypes.forEach(type => {
+                const opt = document.createElement('option');
+                opt.value = type; opt.innerText = type;
+                dropdown.appendChild(opt);
+            });
+
+            gsap.to("#selection-model", { opacity: 0, y: -20, duration: 0.3, onComplete: () => {
+                document.getElementById('selection-model').classList.add('hide');
+                document.getElementById('selection-type').classList.remove('hide');
+                gsap.fromTo("#selection-type", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+            }});
         }
 
-        function renderLibrary() {
+        function resetFleetModel() {
+            selectedModel = null; selectedType = null;
+            document.getElementById('checklist-results').classList.add('hide');
+            document.getElementById('selection-type').classList.add('hide');
+            document.getElementById('selection-model').classList.remove('hide');
+            gsap.fromTo("#selection-model", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
+        }
+
+        function selectFleetType(type) {
+            selectedType = type;
+            renderLibraryChecklists();
+            document.getElementById('checklist-results').classList.remove('hide');
+            gsap.fromTo("#checklist-results", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+        }
+
+        function renderLibraryChecklists() {
             const normalContainer = document.getElementById('normal-tabs');
             const emergencyContainer = document.getElementById('emergency-tabs');
-            normalContainer.innerHTML = "";
-            emergencyContainer.innerHTML = "";
+            normalContainer.innerHTML = ""; emergencyContainer.innerHTML = "";
 
-            appData.forEach(item => {
+            const filteredData = appData.filter(item => item.aircraftModel === selectedModel && item.aircraftType === selectedType);
+
+            filteredData.forEach(item => {
                 const type = String(item.type).toLowerCase();
                 const btn = document.createElement('button');
                 btn.className = `tab-btn ${type} group`;
                 btn.onclick = () => openPreview(item);
-                btn.innerHTML = `
-                    <div class="flex justify-between items-start w-full">
-                        <span class="text-[8px] font-black tracking-widest opacity-30 group-hover:opacity-100 uppercase ${type === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
-                        <svg class="w-3 h-3 opacity-10 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3"/></svg>
-                    </div>
-                    <h4 class="text-[10px] font-bold leading-tight uppercase text-slate-300 group-hover:text-white line-clamp-2">${item.title}</h4>
-                `;
+                btn.innerHTML = `<div class="flex justify-between items-start w-full">
+                    <span class="text-[8px] font-black opacity-30 group-hover:opacity-100 uppercase ${type === 'emergency' ? 'text-red-500' : 'text-sky-500'}">${item.section || 'SEC-X'}</span>
+                    <svg class="w-3 h-3 opacity-10 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3"/></svg>
+                </div>
+                <h4 class="text-[10px] font-bold leading-tight uppercase text-slate-300 group-hover:text-white line-clamp-2">${item.title}</h4>`;
+                
                 if (type === 'emergency') emergencyContainer.appendChild(btn);
                 else normalContainer.appendChild(btn);
             });
+
+            if (emergencyContainer.children.length === 0) emergencyContainer.innerHTML = '<p class="col-span-full py-8 text-center text-[9px] text-slate-700 font-bold uppercase tracking-widest border border-dashed border-white/5 rounded-2xl">No critical protocols</p>';
+            if (normalContainer.children.length === 0) normalContainer.innerHTML = '<p class="col-span-full py-8 text-center text-[9px] text-slate-700 font-bold uppercase tracking-widest border border-dashed border-white/5 rounded-2xl">No operational records</p>';
         }
 
         function renderDocuments() {
@@ -382,19 +452,44 @@
             tbody.innerHTML = "";
             appData.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-white/[0.02] hover:bg-white/[0.01] transition-colors";
-                const typeColor = String(item.type).toLowerCase() === 'emergency' ? 'text-red-500 border-red-500/20 bg-red-500/5' : 'text-sky-400 border-sky-500/20 bg-sky-500/5';
+                tr.className = "border-b border-white/[0.02] hover:bg-white/[0.01]";
                 tr.innerHTML = `
+                    <td class="p-4"><div class="text-xs font-bold text-slate-300 uppercase tracking-tight">${item.aircraftModel}</div><div class="text-[10px] text-sky-500 uppercase">${item.aircraftType}</div></td>
                     <td class="p-4"><span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.section}</span></td>
                     <td class="p-4 font-semibold text-slate-200">${item.title}</td>
-                    <td class="p-4 hidden md:table-cell"><span class="text-[9px] font-bold uppercase px-2 py-0.5 border rounded-full ${typeColor}">${item.type}</span></td>
                     <td class="p-4 text-right">
-                        <button onclick="editItem('${item.id}')" class="p-2 text-slate-500 hover:text-sky-400 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg></button>
-                        <button onclick="triggerDelete('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition-all"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg></button>
-                    </td>
-                `;
+                        <button onclick="editItem('${item.id}')" class="p-2 text-slate-500 hover:text-sky-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg></button>
+                        <button onclick="triggerDelete('${item.id}')" class="p-2 text-slate-500 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg></button>
+                    </td>`;
                 tbody.appendChild(tr);
             });
+        }
+
+        // FORM LOGIC
+        function updateFormTypeOptions(model) {
+            const select = document.getElementById('form-aircraft-type-select');
+            const manualInput = document.getElementById('form-aircraft-type-manual');
+            select.innerHTML = '<option value="" disabled selected>Select Type</option>';
+            manualInput.classList.add('hide');
+
+            const types = model === 'Helicopter' ? HELI_TYPES : FW_TYPES;
+            types.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t; opt.innerText = t;
+                select.appendChild(opt);
+            });
+
+            if(model === 'Fixedwing' || model === 'Helicopter') {
+                const optManual = document.createElement('option');
+                optManual.value = "MANUAL"; optManual.innerText = "+ Add Manual Type";
+                select.appendChild(optManual);
+            }
+        }
+
+        function checkManualType(val) {
+            const input = document.getElementById('form-aircraft-type-manual');
+            if(val === 'MANUAL') input.classList.remove('hide');
+            else input.classList.add('hide');
         }
 
         function switchPage(page) {
@@ -407,11 +502,13 @@
             document.getElementById(`nav-${page}`).classList.add('active', 'text-white');
             document.getElementById(`nav-${page}`).classList.remove('text-slate-500');
 
+            if(page === 'library') resetFleetModel();
             if (page === 'add') {
                 document.getElementById('protocol-form').reset();
                 document.getElementById('form-id').value = "";
                 document.getElementById('form-title-heading').innerText = "Initialize Protocol";
                 document.getElementById('cancel-btn').classList.add('hide');
+                document.getElementById('form-aircraft-type-manual').classList.add('hide');
             }
         }
 
@@ -421,11 +518,104 @@
             switchPage('add');
             document.getElementById('form-title-heading').innerText = "Modify Protocol";
             document.getElementById('form-id').value = item.id;
+            document.getElementById('form-aircraft-model').value = item.aircraftModel;
+            updateFormTypeOptions(item.aircraftModel);
+            
+            const typeSelect = document.getElementById('form-aircraft-type-select');
+            const defaults = item.aircraftModel === 'Helicopter' ? HELI_TYPES : FW_TYPES;
+            
+            if(defaults.includes(item.aircraftType)) {
+                typeSelect.value = item.aircraftType;
+            } else {
+                typeSelect.value = "MANUAL";
+                const manualInput = document.getElementById('form-aircraft-type-manual');
+                manualInput.classList.remove('hide');
+                manualInput.value = item.aircraftType;
+            }
+
             document.getElementById('form-section').value = item.section;
             document.getElementById('form-type').value = item.type;
             document.getElementById('form-title').value = item.title;
             document.getElementById('form-content').value = item.content || "";
             document.getElementById('cancel-btn').classList.remove('hide');
+        }
+
+        document.getElementById('protocol-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true; btn.innerHTML = "SYNCING...";
+
+            const typeSelect = document.getElementById('form-aircraft-type-select').value;
+            const aircraftType = typeSelect === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeSelect;
+
+            const payload = {
+                action: document.getElementById('form-id').value ? 'update' : 'create',
+                id: document.getElementById('form-id').value,
+                aircraftModel: document.getElementById('form-aircraft-model').value,
+                aircraftType: aircraftType,
+                section: document.getElementById('form-section').value,
+                type: document.getElementById('form-type').value,
+                title: document.getElementById('form-title').value,
+                content: document.getElementById('form-content').value,
+                fileName: selectedFileName,
+                fileMime: selectedFileType,
+                fileData: selectedFileBase64
+            };
+
+            try {
+                const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
+                const result = await res.json();
+                if (result.status === "success") { showToast("System Synchronized", "success"); switchPage('documents'); fetchData(); }
+            } catch (err) { showToast("Uplink failure", "error"); }
+            finally { btn.disabled = false; btn.innerText = "Sync Databank"; }
+        };
+
+        // PREVIEW & DOWNLOAD
+        function openPreview(item) {
+            activeItem = item;
+            const meta = document.getElementById('preview-meta');
+            meta.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.4em] font-bold mb-1">${item.aircraftType} // ${item.section}</p><h3 class="font-bold text-lg md:text-xl font-orbitron text-white uppercase">${item.title}</h3>`;
+            document.getElementById('preview-modal').classList.remove('hide');
+            const container = document.getElementById('preview-content');
+            if (item.content) container.innerHTML = parseContent(item.content);
+            else if (item.fileUrl) {
+                if (item.fileType?.includes('pdf')) container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>`;
+                else container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl">`;
+            } else container.innerHTML = '<p class="text-center text-slate-700 uppercase font-bold text-[10px] mt-20">No data linked</p>';
+        }
+
+        function parseContent(text) {
+            const lines = text.split('\n');
+            let html = '<div class="space-y-4 font-mono">';
+            lines.forEach(line => {
+                const t = line.trim(); if (!t) return;
+                if (t === t.toUpperCase() && !t.includes('☐') && !t.includes('⚠')) {
+                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-8 mb-2 border-b border-white/5 pb-2 uppercase">${t}</h4>`;
+                } else if (t.includes('⚠') || t.toUpperCase().includes('CAUTION')) {
+                    html += `<div class="caution-alert p-6 rounded-2xl my-4 text-sm flex gap-4 italic uppercase tracking-wider"><span class="text-2xl font-bold">⚠</span><div>${t.replace(/⚠/g, '')}</div></div>`;
+                } else if (t.includes('☐')) {
+                    const parts = t.replace('☐', '').split('—');
+                    html += `<div class="check-item flex items-start gap-4 p-4 rounded-xl cursor-pointer" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded border border-slate-700 indicator flex-shrink-0"></div><div class="flex-1 text-sm"><span class="text-slate-100 font-bold uppercase">${parts[0].trim()}</span>${parts[1] ? `<span class="text-slate-600 mx-3 opacity-50">|</span><span class="text-sky-400 font-bold uppercase text-[10px]">${parts[1].trim()}</span>` : ''}</div></div>`;
+                } else {
+                    html += `<p class="text-slate-500 text-xs px-2 leading-relaxed uppercase opacity-60 tracking-wider">${t}</p>`;
+                }
+            });
+            return html + '</div>';
+        }
+
+        function downloadCurrentFile() {
+            if (!activeItem) return;
+            if (activeItem.content) {
+                const element = document.createElement('a');
+                const file = new Blob([activeItem.content], {type: 'text/plain'});
+                element.href = URL.createObjectURL(file);
+                element.download = `SkyOps_${activeItem.title.replace(/\s+/g, '_')}.txt`;
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            } else if (activeItem.fileUrl) {
+                window.open(activeItem.fileUrl.replace('/preview', '/view').replace('/view', '/uc?export=download'), '_blank');
+            }
         }
 
         function triggerDelete(id) { deleteId = id; document.getElementById('delete-modal').classList.remove('hide'); }
@@ -440,79 +630,6 @@
                 if (result.status === "success") { showToast("Record Erased", "success"); fetchData(); }
             } catch (e) { showToast("Erasure failed", "error"); }
             finally { btn.disabled = false; btn.innerText = "Delete"; closeDeleteModal(); }
-        }
-
-        document.getElementById('protocol-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true; btn.innerHTML = "SYNCING DATABANK...";
-            const payload = {
-                action: document.getElementById('form-id').value ? 'update' : 'create',
-                id: document.getElementById('form-id').value,
-                section: document.getElementById('form-section').value,
-                type: document.getElementById('form-type').value,
-                title: document.getElementById('form-title').value,
-                content: document.getElementById('form-content').value,
-                fileName: selectedFileName,
-                fileMime: selectedFileType,
-                fileData: selectedFileBase64
-            };
-            try {
-                const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
-                const result = await res.json();
-                if (result.status === "success") { showToast("System Synchronized", "success"); switchPage('documents'); fetchData(); }
-            } catch (err) { showToast("Uplink failure", "error"); }
-            finally { btn.disabled = false; btn.innerText = "Sync Databank"; }
-        };
-
-        function parseContent(text) {
-            const lines = text.split('\n');
-            let html = '<div class="space-y-4 font-mono">';
-            lines.forEach(line => {
-                const t = line.trim(); if (!t) return;
-                if (t === t.toUpperCase() && !t.includes('☐') && !t.includes('⚠')) {
-                    html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-8 mb-2 border-b border-white/5 pb-2 uppercase">${t}</h4>`;
-                } else if (t.includes('⚠') || t.toUpperCase().includes('CAUTION')) {
-                    html += `<div class="caution-alert p-6 rounded-2xl my-4 text-sm flex gap-4 italic uppercase tracking-wider"><span class="text-2xl font-bold">⚠</span><div>${t.replace(/⚠/g, '')}</div></div>`;
-                } else if (t.includes('☐')) {
-                    const parts = t.replace('☐', '').split('—');
-                    html += `<div class="check-item flex items-start gap-4 p-4 rounded-xl cursor-pointer" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded border border-slate-700 indicator flex-shrink-0 transition-all"></div><div class="flex-1 text-sm"><span class="text-slate-100 font-bold uppercase">${parts[0].trim()}</span>${parts[1] ? `<span class="text-slate-600 mx-3 opacity-50">|</span><span class="text-sky-400 font-bold uppercase text-[10px] tracking-widest">${parts[1].trim()}</span>` : ''}</div></div>`;
-                } else {
-                    html += `<p class="text-slate-500 text-xs px-2 leading-relaxed font-medium uppercase opacity-60 tracking-wider">${t}</p>`;
-                }
-            });
-            return html + '</div>';
-        }
-
-        function openPreview(item) {
-            activeItem = item;
-            const meta = document.getElementById('preview-meta');
-            meta.innerHTML = `<p class="text-[9px] uppercase text-sky-500 tracking-[0.4em] font-bold mb-1">${item.section} // PROTOCOL</p><h3 class="font-bold text-lg md:text-xl font-orbitron text-white uppercase">${item.title}</h3>`;
-            document.getElementById('preview-modal').classList.remove('hide');
-            const container = document.getElementById('preview-content');
-            if (item.content) container.innerHTML = parseContent(item.content);
-            else if (item.fileUrl) {
-                if (item.fileType?.includes('pdf')) container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none rounded-xl"></iframe>`;
-                else container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto rounded-xl">`;
-            } else container.innerHTML = '<p class="text-center text-slate-700 uppercase font-bold text-[10px] mt-20 tracking-widest">No data linked</p>';
-        }
-
-        function downloadCurrentFile() {
-            if (!activeItem) return;
-            if (activeItem.content) {
-                const element = document.createElement('a');
-                const file = new Blob([activeItem.content], {type: 'text/plain'});
-                element.href = URL.createObjectURL(file);
-                element.download = `SkyOps_${activeItem.title.replace(/\s+/g, '_')}.txt`;
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-                showToast("Text Log downloaded", "success");
-            } else if (activeItem.fileUrl) {
-                const link = activeItem.fileUrl.replace('/preview', '/view').replace('/view', '/uc?export=download');
-                window.open(link, '_blank');
-                showToast("Request sent", "info");
-            }
         }
 
         function closePreview() { document.getElementById('preview-modal').classList.add('hide'); activeItem = null; }
@@ -535,7 +652,7 @@
         function showToast(m, t) {
             const toast = document.createElement('div');
             const c = { success: 'border-green-500 text-green-500', error: 'border-red-500 text-red-500', info: 'border-sky-500 text-sky-500' };
-            toast.className = `px-6 py-4 rounded-2xl glass-panel ${c[t]} font-bold text-[9px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase border`;
+            toast.className = `px-6 py-4 rounded-2xl glass-panel ${c[t]} font-bold text-[9px] tracking-widest translate-x-20 opacity-0 transition-all duration-300 uppercase border shadow-2xl`;
             toast.innerText = m;
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 100);
