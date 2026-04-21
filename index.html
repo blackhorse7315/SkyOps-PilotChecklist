@@ -16,6 +16,7 @@
             --accent: #38bdf8;
             --bg-dark: #0f172a;
             --glass: rgba(15, 23, 42, 0.8);
+            --emergency: #ef4444;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -68,6 +69,28 @@
             color: #f59e0b;
         }
 
+        /* Emergency Tab Style */
+        .emergency-tab {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .emergency-tab:hover {
+            border-color: var(--emergency);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);
+        }
+        .emergency-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 3px; height: 100%;
+            background: var(--emergency);
+            box-shadow: 0 0 10px var(--emergency);
+        }
+
         .pulse-loading { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     </style>
@@ -114,16 +137,25 @@
             <!-- Library -->
             <div id="page-library" class="space-y-10">
                 <div id="list-emergency-section">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-2 h-8 bg-red-500 rounded-full"></div>
-                        <h3 class="text-xl font-bold text-red-400 font-orbitron uppercase tracking-widest">Emergency procedures</h3>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]"></div>
+                            <h3 class="text-xl font-bold text-red-400 font-orbitron uppercase tracking-widest">Emergency procedures</h3>
+                        </div>
+                        <span class="text-[9px] text-red-500/50 font-bold tracking-tighter animate-pulse">CRITICAL STATUS ACTIVE</span>
                     </div>
+
+                    <!-- Emergency Quick-Access Tabs -->
+                    <div id="emergency-tabs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+                        <!-- Special Tabs will be injected here -->
+                    </div>
+
                     <div id="list-emergency" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
 
                 <div id="list-normal-section">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-2 h-8 bg-sky-500 rounded-full"></div>
+                        <div class="w-2 h-8 bg-sky-500 rounded-full shadow-[0_0_10px_#0ea5e9]"></div>
                         <h3 class="text-xl font-bold text-sky-400 font-orbitron uppercase tracking-widest">Normal Operations</h3>
                     </div>
                     <div id="list-normal" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -155,14 +187,13 @@
                         
                         <div>
                             <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Procedure Title</label>
-                            <input type="text" id="form-title" placeholder="e.g. Pilot Walk-around" required class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm">
+                            <input type="text" id="form-title" placeholder="e.g. Engine failures" required class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm">
                         </div>
 
                         <div>
                             <label class="block text-xs uppercase tracking-widest text-slate-500 mb-2 font-bold">Checklist Content (Smart Parser)</label>
                             <textarea id="form-content" rows="8" placeholder="Paste your checklist text here...&#10;☐ Main Rotor - Removed&#10;⚠ CAUTION: Lose of parking brakes" 
                                 class="w-full bg-slate-900 border border-white/10 rounded-lg px-4 py-3 outline-none focus:border-sky-500 transition-all text-sm font-mono"></textarea>
-                            <p class="text-[10px] text-slate-500 mt-1 italic">*Use ☐ symbol for items, ⚠ for cautions, and UPPERCASE for sections.</p>
                         </div>
 
                         <div class="text-center py-2 text-slate-500 text-xs font-bold uppercase tracking-widest">— OR —</div>
@@ -193,16 +224,14 @@
         <div class="relative w-full max-w-4xl h-[90vh] glass-morphism rounded-2xl overflow-hidden flex flex-col shadow-2xl">
             <div class="flex items-center justify-between p-4 border-b border-white/10">
                 <div>
-                    <h3 id="preview-title" class="font-bold text-lg font-orbitron text-sky-400">Preview</h3>
+                    <h3 id="preview-title" class="font-bold text-lg font-orbitron text-sky-400 uppercase">Preview</h3>
                     <p id="preview-section" class="text-[10px] uppercase text-slate-500 tracking-widest font-bold"></p>
                 </div>
-                <button onclick="closePreview()" class="p-2 hover:bg-white/10 rounded-full">
+                <button onclick="closePreview()" class="p-2 hover:bg-white/10 rounded-full transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            <div id="preview-container" class="flex-1 overflow-auto bg-[#020617] p-6 sm:p-10">
-                <!-- Smart Checklist will render here -->
-            </div>
+            <div id="preview-container" class="flex-1 overflow-auto bg-[#020617] p-6 sm:p-10"></div>
             <div class="p-4 border-t border-white/10 text-center bg-black/20">
                 <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">SkyOps Flight Protocol • Confirmed by Digital Signature</p>
             </div>
@@ -213,7 +242,7 @@
         <div class="absolute inset-0 bg-black/60" onclick="toggleConfig()"></div>
         <div class="relative w-full max-w-md glass-morphism rounded-2xl p-6 shadow-2xl">
             <h3 class="text-xl font-bold font-orbitron mb-4">SYSTEM CONFIG</h3>
-            <input type="text" id="config-url" placeholder="https://script.google.com/.../exec" class="w-full bg-slate-900 border border-white/10 rounded px-3 py-3 text-sm focus:border-sky-500 outline-none text-sky-400 mb-4">
+            <input type="text" id="config-url" placeholder="Paste Script URL" class="w-full bg-slate-900 border border-white/10 rounded px-3 py-3 text-sm focus:border-sky-500 outline-none text-sky-400 mb-4">
             <button onclick="saveConfig()" class="w-full bg-sky-600 py-3 rounded font-bold text-sm">ESTABLISH CONNECTION</button>
         </div>
     </div>
@@ -223,6 +252,19 @@
     <script>
         let appData = [];
         let scriptUrl = localStorage.getItem('skyops_url') || "";
+
+        // Daftar Judul Tab Emergency yang ditentukan
+        const EMERGENCY_PRIORITY_TITLES = [
+            "Rotor warnings",
+            "Engine failures",
+            "Fire procedures",
+            "Tail rotor emergencies",
+            "Hydraulic failures",
+            "Electrical failures",
+            "Landing gear failures",
+            "EFIS failures",
+            "Misc malfunction"
+        ];
 
         window.onload = () => {
             if (scriptUrl) {
@@ -267,14 +309,48 @@
         function renderLibrary() {
             const containerNormal = document.getElementById('list-normal');
             const containerEmergency = document.getElementById('list-emergency');
+            const containerEmergencyTabs = document.getElementById('emergency-tabs');
+            
             containerNormal.innerHTML = "";
             containerEmergency.innerHTML = "";
+            containerEmergencyTabs.innerHTML = "";
 
             const normals = appData.filter(item => String(item.type).toLowerCase() === "normal");
             const emergencies = appData.filter(item => String(item.type).toLowerCase() === "emergency");
 
+            // Filter Emergency items yang masuk kategori Tab Prioritas
+            const priorityEmergencyItems = emergencies.filter(item => 
+                EMERGENCY_PRIORITY_TITLES.some(t => t.toLowerCase() === String(item.title).toLowerCase())
+            );
+
+            // Filter Emergency items sisanya (yang bukan tab prioritas)
+            const otherEmergencyItems = emergencies.filter(item => 
+                !EMERGENCY_PRIORITY_TITLES.some(t => t.toLowerCase() === String(item.title).toLowerCase())
+            );
+
+            // Render Tab Prioritas
+            if (priorityEmergencyItems.length > 0) {
+                priorityEmergencyItems.forEach(item => {
+                    const tab = document.createElement('button');
+                    tab.className = "emergency-tab p-4 rounded-lg text-left group";
+                    tab.onclick = () => openPreview(item);
+                    tab.innerHTML = `
+                        <p class="text-[8px] uppercase tracking-widest text-red-500 font-bold mb-1 opacity-60 group-hover:opacity-100 transition-all">PRIORITY ACCESS</p>
+                        <h4 class="text-xs font-bold text-slate-100 leading-tight uppercase group-hover:text-red-400 transition-all">${item.title}</h4>
+                    `;
+                    containerEmergencyTabs.appendChild(tab);
+                });
+            } else {
+                containerEmergencyTabs.innerHTML = '<div class="col-span-full py-4 text-center text-slate-600 italic text-xs">No priority tabs configured. Use specific titles in Emergency mode.</div>';
+            }
+
+            // Render kartu Normal & Emergency lainnya
             normals.forEach(item => containerNormal.appendChild(createCard(item)));
-            emergencies.forEach(item => containerEmergency.appendChild(createCard(item)));
+            otherEmergencyItems.forEach(item => containerEmergency.appendChild(createCard(item)));
+            
+            if (otherEmergencyItems.length === 0 && priorityEmergencyItems.length === 0) {
+                containerEmergency.innerHTML = '<div class="col-span-full py-10 text-center text-slate-600 italic">No emergency protocols found.</div>';
+            }
         }
 
         function createCard(item) {
@@ -299,48 +375,24 @@
             return card;
         }
 
-        // Checklist Parser Engine
         function parseChecklistText(text) {
             const lines = text.split('\n');
             let html = '<div class="space-y-6 font-mono">';
-            
-            lines.forEach((line, index) => {
+            lines.forEach((line) => {
                 const trimmed = line.trim();
                 if (!trimmed) return;
-
-                // Header (All uppercase and no symbol)
                 if (trimmed === trimmed.toUpperCase() && !trimmed.includes('☐') && !trimmed.includes('⚠')) {
                     html += `<h4 class="text-sky-500 font-orbitron font-bold text-lg mt-8 mb-4 border-b border-sky-500/20 pb-2">${trimmed}</h4>`;
-                }
-                // Caution
-                else if (trimmed.includes('⚠') || trimmed.toUpperCase().includes('CAUTION:')) {
-                    html += `<div class="caution-box p-4 rounded-lg my-4 text-sm flex gap-3 italic">
-                        <span class="text-xl">⚠</span>
-                        <div>${trimmed.replace(/⚠/g, '').replace(/CAUTION:/gi, '<strong>CAUTION:</strong>')}</div>
-                    </div>`;
-                }
-                // Checkbox Item
-                else if (trimmed.includes('☐') || trimmed.startsWith('-') || trimmed.startsWith('•')) {
+                } else if (trimmed.includes('⚠') || trimmed.toUpperCase().includes('CAUTION:')) {
+                    html += `<div class="caution-box p-4 rounded-lg my-4 text-sm flex gap-3 italic"><span class="text-xl">⚠</span><div>${trimmed.replace(/⚠/g, '').replace(/CAUTION:/gi, '<strong>CAUTION:</strong>')}</div></div>`;
+                } else if (trimmed.includes('☐') || trimmed.startsWith('-') || trimmed.startsWith('•')) {
                     const cleanText = trimmed.replace(/[☐\-•]/g, '').trim();
-                    const parts = cleanText.split('—'); // Split Title and Action/Status
-                    
-                    html += `
-                    <div class="check-item group flex items-start gap-4 p-3 rounded-md cursor-pointer border-l-2 border-transparent transition-all" onclick="this.classList.toggle('completed')">
-                        <div class="mt-1 w-5 h-5 rounded border border-slate-700 flex items-center justify-center flex-shrink-0 group-hover:border-sky-500 transition-all">
-                            <div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div>
-                        </div>
-                        <div class="flex-1 text-sm leading-relaxed">
-                            <span class="text-slate-200 font-medium">${parts[0]}</span>
-                            ${parts[1] ? `<span class="text-slate-500 mx-2">—</span><span class="text-sky-400/80">${parts[1]}</span>` : ''}
-                        </div>
-                    </div>`;
-                }
-                // Standard text
-                else {
+                    const parts = cleanText.split('—');
+                    html += `<div class="check-item group flex items-start gap-4 p-3 rounded-md cursor-pointer border-l-2 border-transparent transition-all" onclick="this.classList.toggle('completed')"><div class="mt-1 w-5 h-5 rounded border border-slate-700 flex items-center justify-center flex-shrink-0 group-hover:border-sky-500 transition-all"><div class="w-2.5 h-2.5 bg-sky-500 rounded-sm opacity-0 check-indicator transition-all"></div></div><div class="flex-1 text-sm leading-relaxed"><span class="text-slate-200 font-medium">${parts[0]}</span>${parts[1] ? `<span class="text-slate-500 mx-2">—</span><span class="text-sky-400/80">${parts[1]}</span>` : ''}</div></div>`;
+                } else {
                     html += `<p class="text-slate-400 text-xs px-2">${trimmed}</p>`;
                 }
             });
-
             html += '</div>';
             return html;
         }
@@ -350,29 +402,24 @@
             const container = document.getElementById('preview-container');
             document.getElementById('preview-title').innerText = item.title;
             document.getElementById('preview-section').innerText = `${item.section} • ${item.type} PROTOCOL`;
-            
             modal.classList.remove('hide');
-            
             if (item.content) {
                 container.innerHTML = parseChecklistText(item.content);
             } else if (item.fileUrl) {
                 if (item.fileType && item.fileType.includes('pdf')) {
                     container.innerHTML = `<iframe src="${item.fileUrl}" class="w-full h-full border-none"></iframe>`;
                 } else {
-                    container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto">`;
+                    container.innerHTML = `<img src="${item.fileUrl}" class="max-w-full max-h-full object-contain mx-auto shadow-2xl rounded-lg">`;
                 }
             }
         }
 
-        // Form Submit
         document.getElementById('checklist-form').onsubmit = async (e) => {
             e.preventDefault();
             if (!scriptUrl) return toggleConfig();
-            
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="pulse-loading">TRANSMITTING...</span>`;
-
+            submitBtn.innerHTML = `<span class="pulse-loading tracking-widest">TRANSMITTING MISSION DATA...</span>`;
             const payload = {
                 action: 'create',
                 section: document.getElementById('form-section').value,
@@ -383,12 +430,11 @@
                 fileMime: selectedFileType,
                 fileData: selectedFileBase64
             };
-
             try {
                 const response = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await response.json();
                 if (result.status === "success") {
-                    showToast("Mission Data Synchronized", "success");
+                    showToast("Database Synchronized", "success");
                     document.getElementById('checklist-form').reset();
                     selectedFileBase64 = null;
                     document.getElementById('file-info').innerHTML = `<p class="text-xs">Select Legacy Document</p>`;
@@ -396,14 +442,13 @@
                     fetchData();
                 }
             } catch (error) {
-                showToast("Transmission Error", "error");
+                showToast("Transmission Failure", "error");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>SYCHRONIZE TO SKYDRIVE</span>`;
             }
         };
 
-        // Utility & Helpers
         const fileInput = document.getElementById('form-file');
         let selectedFileBase64 = null, selectedFileName = "", selectedFileType = "";
         document.getElementById('drop-area').onclick = () => fileInput.click();
@@ -436,7 +481,7 @@
         function showToast(m, t) {
             const toast = document.createElement('div');
             const c = { success: 'border-green-500 text-green-500', error: 'border-red-500 text-red-500', info: 'border-sky-500 text-sky-500' };
-            toast.className = `px-6 py-3 rounded border glass-morphism ${c[t]} font-medium text-xs tracking-widest translate-x-20 opacity-0 transition-all duration-300`;
+            toast.className = `px-6 py-3 rounded border glass-morphism ${c[t]} font-medium text-[10px] tracking-widest translate-x-20 opacity-0 transition-all duration-300`;
             toast.innerText = m.toUpperCase();
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 100);
