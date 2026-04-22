@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SkyOps">
     
-    <!-- Link Manifest via Data URI (Crucial for Single File Installability) -->
+    <!-- Link Manifest via Data URI -->
     <link id="pwa-manifest" rel="manifest">
     
     <!-- App Icons -->
@@ -63,31 +63,30 @@
 </head>
 <body class="no-scrollbar">
 
-    <!-- Opening Screen -->
+    <!-- Layar Pembuka -->
     <div id="opening-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center text-center px-4">
-        <h1 class="font-orbitron text-4xl font-bold tracking-[0.3em] text-white">SKYOPS</h1>
+        <h1 class="font-orbitron text-4xl font-bold tracking-[0.3em] text-white uppercase">SkyOps</h1>
         <p id="opening-subtitle" class="font-orbitron text-[10px] tracking-[0.4em] text-sky-500 uppercase mt-2 opacity-0 text-center">Pilot Checklist System</p>
         <div class="w-48 h-[1px] bg-slate-900 mt-10 overflow-hidden rounded-full"><div id="boot-bar" class="w-0 h-full bg-sky-500 shadow-[0_0_10px_#0ea5e9]"></div></div>
     </div>
 
     <div id="app" class="opacity-0 min-h-screen pt-20 pb-10">
-        <!-- Header Navigation -->
+        <!-- Navigasi -->
         <nav class="fixed top-0 inset-x-0 h-16 glass z-50 flex items-center justify-between px-6">
             <span class="font-orbitron font-bold text-lg tracking-tighter uppercase cursor-pointer" onclick="switchPage('library')">SKYOPS</span>
             
             <div class="flex items-center gap-3 sm:gap-6 text-[10px] font-bold uppercase tracking-widest">
-                <!-- User Links -->
+                <!-- Navigasi User -->
                 <div id="user-nav" class="flex gap-3 sm:gap-6 items-center">
                     <button onclick="switchPage('library')" id="nav-library" class="nav-link active">Library</button>
                     <button onclick="fetchData()" class="text-slate-500 hover:text-sky-400 p-1" title="Sync Data">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </button>
-                    <!-- Tombol Install muncul otomatis jika kriteria PWA terpenuhi -->
                     <button id="install-btn" class="hide bg-sky-600/20 text-sky-400 px-3 py-1 rounded border border-sky-500/30 install-pulse">Install App</button>
                     <button onclick="switchPage('login')" id="nav-login" class="text-slate-500 hover:text-white px-3 py-1 border border-white/10 rounded-md">Admin</button>
                 </div>
                 
-                <!-- Admin Links -->
+                <!-- Navigasi Admin -->
                 <div id="admin-nav" class="hide flex gap-4 sm:gap-6 items-center">
                     <button onclick="switchPage('documents')" id="nav-documents" class="nav-link">Databank</button>
                     <button onclick="switchPage('add')" id="nav-add" class="nav-link">Initialize</button>
@@ -97,7 +96,7 @@
         </nav>
 
         <main class="max-w-7xl mx-auto px-6">
-            <!-- PAGE: LIBRARY -->
+            <!-- HALAMAN: LIBRARY -->
             <div id="page-library" class="space-y-12">
                 <div id="selection-model" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto pt-10">
                     <div onclick="selectFleetModel('Helicopter')" class="model-card p-16 rounded-3xl text-center">
@@ -132,7 +131,7 @@
                 </div>
             </div>
 
-            <!-- PAGE: LOGIN -->
+            <!-- HALAMAN: LOGIN -->
             <div id="page-login" class="hide max-w-md mx-auto pt-20">
                 <div class="glass p-10 rounded-3xl space-y-8 shadow-2xl">
                     <div class="text-center space-y-2">
@@ -148,7 +147,7 @@
                 </div>
             </div>
 
-            <!-- PAGE: DATABANK (Admin) -->
+            <!-- HALAMAN: DATABANK (Admin) -->
             <div id="page-documents" class="hide space-y-6">
                 <div class="flex justify-between items-center">
                     <h2 class="font-orbitron text-xl font-bold uppercase tracking-widest text-slate-200">Registry Databank</h2>
@@ -164,7 +163,7 @@
                 </div>
             </div>
 
-            <!-- PAGE: INITIALIZE (Admin) -->
+            <!-- HALAMAN: INITIALIZE (Admin) -->
             <div id="page-add" class="hide max-w-3xl mx-auto">
                 <div class="glass rounded-3xl p-8 space-y-6 relative border border-white/10 shadow-2xl">
                     <button onclick="switchPage('documents')" class="absolute top-6 right-6 text-slate-500 hover:text-white">
@@ -234,8 +233,7 @@
         let isAdmin = false;
         let deferredPrompt;
 
-        // --- PWA LOGIC START ---
-        // 1. Generate Manifest as Data URI
+        // --- LOGIKA PWA ---
         const manifest = {
             "name": "SkyOps Pilot Checklist",
             "short_name": "SkyOps",
@@ -244,54 +242,30 @@
             "background_color": "#020617",
             "theme_color": "#020617",
             "description": "Professional Aviation Protocol Suite",
-            "icons": [
-                {
-                    "src": "https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF",
-                    "sizes": "512x512",
-                    "type": "image/png",
-                    "purpose": "any maskable"
-                }
-            ]
+            "icons": [{ "src": "https://lh3.googleusercontent.com/d/1maWW9xYa_TOAVTu_aiDmFZ5zX0U_e3DF", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
         };
-        const stringManifest = JSON.stringify(manifest);
-        const blobManifest = new Blob([stringManifest], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(blobManifest);
-        document.querySelector('#pwa-manifest').setAttribute('href', manifestURL);
+        const blobManifest = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        document.querySelector('#pwa-manifest').setAttribute('href', URL.createObjectURL(blobManifest));
 
-        // 2. Register Inline Service Worker via Blob
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                const CACHE_NAME = 'skyops-v1';
-                self.addEventListener('install', (event) => {
-                    self.skipWaiting();
-                });
-                self.addEventListener('fetch', (event) => {
-                    // Chrome requires a fetch handler for installability
-                    event.respondWith(fetch(event.request).catch(() => {}));
-                });
-            `;
+            const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => {})));`;
             const blobSW = new Blob([swCode], {type: 'text/javascript'});
-            const swURL = URL.createObjectURL(blobSW);
-            navigator.serviceWorker.register(swURL).catch(err => console.log("SW Reg Error:", err));
+            navigator.serviceWorker.register(URL.createObjectURL(blobSW)).catch(() => {});
         }
 
-        // 3. Handle Install Prompt
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const installBtn = document.getElementById('install-btn');
-            installBtn.classList.remove('hide');
-            
-            installBtn.onclick = async () => {
+            e.preventDefault(); deferredPrompt = e;
+            const btn = document.getElementById('install-btn');
+            btn.classList.remove('hide');
+            btn.onclick = async () => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') installBtn.classList.add('hide');
+                    if (outcome === 'accepted') btn.classList.add('hide');
                     deferredPrompt = null;
                 }
             };
         });
-        // --- PWA LOGIC END ---
 
         window.onload = () => {
             const tl = gsap.timeline();
@@ -304,6 +278,7 @@
             }});
         };
 
+        // --- SISTEM AUTENTIKASI ---
         function handleLogin() {
             const u = document.getElementById('login-u').value;
             const p = document.getElementById('login-p').value;
@@ -312,35 +287,37 @@
                 document.getElementById('user-nav').classList.add('hide');
                 document.getElementById('admin-nav').classList.remove('hide');
                 switchPage('documents');
-                showToast("Admin Access Granted", "success");
-            } else { showToast("Authentication Failed", "error"); }
+                showToast("Access Granted. Welcome Admin.", "success");
+            } else { 
+                showToast("Invalid credentials.", "error"); 
+            }
         }
 
         function handleLogout() {
             isAdmin = false;
+            // Kosongkan input login
+            document.getElementById('login-u').value = '';
+            document.getElementById('login-p').value = '';
+            // Reset navigasi
             document.getElementById('user-nav').classList.remove('hide');
             document.getElementById('admin-nav').classList.add('hide');
             switchPage('library');
-            showToast("Logged out", "success");
+            showToast("Logged out successfully.", "success");
         }
 
         async function fetchData() {
             showToast("Syncing mission databank...", "info");
             try {
-                const cleanUrl = scriptUrl.trim();
-                const res = await fetch(`${cleanUrl}?action=read&t=${Date.now()}`);
-                if (!res.ok) throw new Error("Server Error");
+                const res = await fetch(`${scriptUrl.trim()}?action=read&t=${Date.now()}`);
+                if (!res.ok) throw new Error("Network Error");
                 const json = await res.json();
                 if (json.status === "success") {
                     appData = json.data || [];
                     renderDocuments();
                     if (selectedModel && selectedType) selectFleetType(selectedType);
                     showToast(`System Synced: ${appData.length} records ready`, "success");
-                } else { throw new Error(json.message); }
-            } catch (e) { 
-                console.error("Fetch Error:", e);
-                showToast("Databank Link Failure.", "error"); 
-            }
+                }
+            } catch (e) { showToast("Sync Failure.", "error"); }
         }
 
         function renderDocuments() {
@@ -369,11 +346,16 @@
             if(targetPage) targetPage.classList.remove('hide');
             if(targetNav) targetNav.classList.add('active');
             
-            if(page === 'add' && !document.getElementById('form-id').value) {
+            // --- PERBAIKAN: Reset form jika mengklik "Add Record" ---
+            if(page === 'add') {
+                // Pastikan form bersih untuk input baru
                 document.getElementById('protocol-form').reset();
+                document.getElementById('form-id').value = ""; // Pastikan ID kosong untuk CREATE
                 document.getElementById('form-heading').innerText = "INITIALIZE PROTOCOL";
                 document.getElementById('file-info').innerText = "Attach Media (PDF/IMG)";
+                document.getElementById('form-aircraft-type-manual').classList.add('hide');
                 selectedFileBase64 = null;
+                selectedFileName = "";
             }
             if(page === 'library') resetFleetModel();
         }
@@ -408,7 +390,7 @@
                         <span class="text-[8px] font-bold opacity-30 uppercase tracking-tighter">${item.section}</span>
                         <h4 class="text-[10px] font-bold leading-tight uppercase group-hover:text-white line-clamp-1">${item.title}</h4>
                     </button>
-                `).join('') || `<p class="text-[9px] text-slate-600 col-span-full italic text-center py-4 tracking-widest">No protocols found.</p>`;
+                `).join('') || `<p class="text-[9px] text-slate-600 col-span-full italic text-center py-4">No protocols found.</p>`;
             };
             renderTabs(filtered.filter(i => i.type === 'Emergency'), 'emergency-tabs');
             renderTabs(filtered.filter(i => i.type === 'Normal'), 'normal-tabs');
@@ -426,7 +408,8 @@
         function editItem(id) {
             const item = appData.find(i => i.id === id);
             if(!item) return;
-            switchPage('add');
+            // Pindah ke halaman Add tetapi muat data
+            switchPage('add'); 
             document.getElementById('form-id').value = item.id;
             document.getElementById('form-aircraft-model').value = item.aircraftModel;
             updateFormTypeOptions(item.aircraftModel);
@@ -435,8 +418,9 @@
                 typeSelect.value = item.aircraftType;
             } else {
                 typeSelect.value = "MANUAL";
-                document.getElementById('form-aircraft-type-manual').classList.remove('hide');
-                document.getElementById('form-aircraft-type-manual').value = item.aircraftType;
+                const manualField = document.getElementById('form-aircraft-type-manual');
+                manualField.classList.remove('hide');
+                manualField.value = item.aircraftType;
             }
             document.getElementById('form-section').value = item.section;
             document.getElementById('form-type').value = item.type;
@@ -444,13 +428,15 @@
             document.getElementById('form-content').value = item.content;
             document.getElementById('form-heading').innerText = "MODIFY PROTOCOL";
             selectedFileBase64 = null;
-            document.getElementById('file-info').innerText = item.fileUrl ? "Existing Media Active" : "Attach Media";
+            document.getElementById('file-info').innerText = item.fileUrl ? "Media Linked" : "No Media Attached";
         }
 
+        // --- PERBAIKAN: Background Saving ---
         document.getElementById('protocol-form').onsubmit = function(e) {
             e.preventDefault();
             const typeVal = document.getElementById('form-aircraft-type-select').value;
             const finalType = typeVal === 'MANUAL' ? document.getElementById('form-aircraft-type-manual').value : typeVal;
+            
             const payload = {
                 action: document.getElementById('form-id').value ? 'update' : 'create',
                 id: document.getElementById('form-id').value,
@@ -462,22 +448,31 @@
                 content: document.getElementById('form-content').value,
                 fileName: selectedFileName, fileMime: selectedFileType, fileData: selectedFileBase64
             };
-            showToast("Syncing in background...", "success");
+
+            // Langsung tutup layar dan kembali ke Databank
+            showToast("Syncing in background...", "info");
             switchPage('documents');
+            
             fetch(scriptUrl, { method: 'POST', body: JSON.stringify(payload) })
-                .then(res => res.json()).then(result => { if(result.status === 'success') { showToast("Synced", "success"); fetchData(); } })
-                .catch(err => showToast("Sync failed", "error"));
+                .then(res => res.json())
+                .then(result => { 
+                    if(result.status === 'success') { 
+                        showToast("Protocol synced successfully", "success"); 
+                        fetchData(); 
+                    } else { showToast("Sync error.", "error"); }
+                })
+                .catch(() => showToast("Network uplink failed", "error"));
         };
 
         function openPreview(item) {
-            document.getElementById('preview-meta').innerHTML = `<p class="text-[9px] text-sky-500 font-bold uppercase tracking-widest">${item.aircraftModel} / ${item.aircraftType} // ${item.section}</p><h3 class="font-orbitron font-bold text-white tracking-tight uppercase">${item.title}</h3>`;
+            document.getElementById('preview-meta').innerHTML = `<p class="text-[9px] text-sky-500 font-bold uppercase tracking-widest">${item.aircraftModel} / ${item.aircraftType} // ${item.section}</p><h3 class="font-orbitron font-bold text-white uppercase tracking-tight">${item.title}</h3>`;
             let contentHtml = '';
             if (item.content) {
                 contentHtml = `<div class="space-y-4 font-mono text-sm uppercase">` + 
                     item.content.split('\n').map(l => {
                         const trimmed = l.trim();
-                        if(trimmed.includes('☐')) return `<div class="p-4 glass rounded-xl font-bold text-xs flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors" onclick="this.style.opacity=0.3"><div class="w-4 h-4 border border-slate-700 rounded"></div>${trimmed.replace('☐','')}</div>`;
-                        if(trimmed.includes('⚠') || trimmed.toUpperCase().includes('CAUTION')) return `<div class="p-5 bg-orange-500/10 text-orange-500 italic text-xs my-4 border-l-4 border-orange-500 rounded-r-xl">${trimmed}</div>`;
+                        if(trimmed.includes('☐')) return `<div class="p-4 glass rounded-xl font-bold text-xs flex items-center gap-4 cursor-pointer" onclick="this.style.opacity=0.3"><div class="w-4 h-4 border border-slate-700 rounded"></div>${trimmed.replace('☐','')}</div>`;
+                        if(trimmed.includes('⚠')) return `<div class="p-5 bg-orange-500/10 text-orange-500 italic text-xs my-4 border-l-4 border-orange-500 rounded-r-xl">${trimmed}</div>`;
                         return `<p class="text-slate-500 text-[10px] px-2 opacity-60 tracking-wider">${trimmed}</p>`;
                     }).join('') + `</div>`;
             } else if (item.fileUrl) {
@@ -500,11 +495,10 @@
 
         async function deleteItem(id) {
             if(!confirm("Are you sure?")) return;
-            showToast("Purging record...", "success");
+            showToast("Purging record...", "info");
             try { 
-                const res = await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: id }) });
-                const json = await res.json();
-                if (json.status === "success") { showToast("Deleted", "success"); fetchData(); }
+                await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({ action: 'delete', id: id }) });
+                fetchData(); 
             } catch (e) { showToast("Error", "error"); }
         }
 
